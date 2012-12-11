@@ -17,11 +17,11 @@ class Pages extends CI_Controller {
 		$data['page_contents'] = $page_contents;
 		
 		// load view with data
-		//$this->load->view('header');
-		//$this->load->view('page_view', $data);
-		//$this->load->view('footer');
+		$this->load->view('header');
+		$this->load->view('page_view', $data);
+		$this->load->view('footer');
 		
-		echo "boom";
+		//echo "boom";
 	}
 	
 	
