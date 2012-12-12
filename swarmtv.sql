@@ -2,13 +2,13 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `swarmtv` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
+USE `swarmtv` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`groups`
+-- Table `swarmtv`.`groups`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`groups` (
+CREATE  TABLE IF NOT EXISTS `swarmtv`.`groups` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `password` BINARY NOT NULL ,
   `description` VARCHAR(256) NULL ,
@@ -17,9 +17,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`pages`
+-- Table `swarmtv`.`pages`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`pages` (
+CREATE  TABLE IF NOT EXISTS `swarmtv`.`pages` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `groups_id` INT NOT NULL ,
   `public` TINYINT(1) NOT NULL DEFAULT true ,
@@ -34,16 +34,16 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`pages` (
   INDEX `fk_pages_groups` (`groups_id` ASC) ,
   CONSTRAINT `fk_pages_groups`
     FOREIGN KEY (`groups_id` )
-    REFERENCES `mydb`.`groups` (`id` )
+    REFERENCES `swarmtv`.`groups` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`content`
+-- Table `swarmtv`.`content`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`content` (
+CREATE  TABLE IF NOT EXISTS `swarmtv`.`content` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `backgroundColor` VARCHAR(16) NULL ,
   `color` VARCHAR(16) NULL ,
@@ -69,16 +69,16 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`content` (
   INDEX `fk_content_pages1` (`pages_id` ASC) ,
   CONSTRAINT `fk_content_pages1`
     FOREIGN KEY (`pages_id` )
-    REFERENCES `mydb`.`pages` (`id` )
+    REFERENCES `swarmtv`.`pages` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`updates`
+-- Table `swarmtv`.`updates`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`updates` (
+CREATE  TABLE IF NOT EXISTS `swarmtv`.`updates` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   `content_id` INT NOT NULL ,
@@ -91,26 +91,26 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`updates` (
   INDEX `fk_updates_groups1` (`groups_id` ASC) ,
   CONSTRAINT `fk_updates_content1`
     FOREIGN KEY (`content_id` )
-    REFERENCES `mydb`.`content` (`id` )
+    REFERENCES `swarmtv`.`content` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_updates_pages1`
     FOREIGN KEY (`pages_id` )
-    REFERENCES `mydb`.`pages` (`id` )
+    REFERENCES `swarmtv`.`pages` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_updates_groups1`
     FOREIGN KEY (`groups_id` )
-    REFERENCES `mydb`.`groups` (`id` )
+    REFERENCES `swarmtv`.`groups` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`searches`
+-- Table `swarmtv`.`searches`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`searches` (
+CREATE  TABLE IF NOT EXISTS `swarmtv`.`searches` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `keywords` TINYINT(1) NULL DEFAULT true ,
   `title` TINYINT(1) NULL DEFAULT true ,
