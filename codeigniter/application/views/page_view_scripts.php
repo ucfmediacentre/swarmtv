@@ -17,8 +17,6 @@ $(document).ready(function(){
         var keywordsVal = $('input[name="keywords"]').val();
         
         var publicVal = $('input[name="public"]').val();
-		
-		//var form_values = { id: idVal , description: descriptionVal, keywords: keywordsVal, public:publicVal }; 
 		 
 		$.post(base_url + "index.php/pages/update", { id: idVal , description: descriptionVal, keywords: keywordsVal, public:publicVal },
    			function(data) {
