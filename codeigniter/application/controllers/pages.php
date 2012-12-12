@@ -2,7 +2,10 @@
 
 class Pages extends CI_Controller {
 
-	
+	public function __construct()
+	{
+		parent::__construct();
+	}
 	
 	public function view($page_id )
 	{
@@ -21,9 +24,20 @@ class Pages extends CI_Controller {
 		$this->load->view('page_view', $data);
 		$this->load->view('footer');
 		
-		//echo "boom";
 	}
 	
+	public function insert($page_title)
+	{
+		// insert the page information
+		$this->load->model('Pages_model');
+		$page_details= $this->Pages_model->insert_page($page_title);
+		$data['page_info'] = $page_details;
+		
+		// load view with data
+		$this->load->view('header');
+		$this->load->view('page_view', $data);
+		$this->load->view('footer');
+	}
 	
 }
 

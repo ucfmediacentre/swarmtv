@@ -2,7 +2,7 @@
 
 class Pages_model extends CI_Model {
 
-    function __construct()
+    public function __construct()
     {
         // Call the Model constructor
         parent::__construct();
@@ -27,6 +27,13 @@ class Pages_model extends CI_Model {
    {
    		$result = $this->db->get_where('pages', array('id' =>$page_id), 1);
    		return $result->row();
+   }
+   
+   public function insert_page($page_title)
+   {
+   		//$row = array('pages'=>'title','$page_title');
+   		$this->db->insert('pages', $row);
+   		return $this->db->insert_id();
    }
 
 }
