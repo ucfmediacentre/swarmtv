@@ -47,5 +47,23 @@ class Pages_model extends CI_Model {
    		
    		return $this->db->insert_id();
    }
+   
+   public function update()
+   {
+   		$id = $this->input->post('id');
+   		$description = $this->input->post('description');
+   		$keywords = $this->input->post('keywords');
+   		$public = $this->input->post('public');
+   		
+	   	$data = array(
+               'description' => $description,
+               'keywords' => $keywords,
+               'public' => $public
+            );
+
+		$this->db->where('id', $id);
+		$this->db->update('pages', $data); 
+		return $this->db->affected_rows();
+   }
 
 }

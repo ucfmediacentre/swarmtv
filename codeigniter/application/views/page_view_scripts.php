@@ -20,7 +20,7 @@ $(document).ready(function(){
 		
 		//var form_values = { id: idVal , description: descriptionVal, keywords: keywordsVal, public:publicVal }; 
 		 
-		$.post(base_url + "index.php/pages/update", { id: "3" , description: descriptionVal, keywords: "dfa adsf asdfasd", public:"1" },
+		$.post(base_url + "index.php/pages/update", { id: idVal , description: descriptionVal, keywords: keywordsVal, public:publicVal },
    			function(data) {
      		alert("Data Loaded: " + data);
    		});

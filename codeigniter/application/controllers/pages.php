@@ -47,7 +47,8 @@ class Pages extends CI_Controller {
 	
 	public function update()
 	{
-		echo $this->input->post('description');
+		$this->load->model('Pages_model');
+		echo $this->Pages_model->update() . " " . $this->input->post('public');
 	}
 	
 	
