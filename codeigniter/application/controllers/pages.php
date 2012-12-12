@@ -45,18 +45,11 @@ class Pages extends CI_Controller {
 		}
 	}
 	
-	public function insert($page_title)
+	public function update()
 	{
-		// insert the page information
-		$this->load->model('Pages_model');
-		$page_details= $this->Pages_model->insert_page($page_title);
-		$data['page_info'] = $page_details;
-		
-		// load view with data
-		$this->load->view('header');
-		$this->load->view('page_view', $data);
-		$this->load->view('footer');
+		echo $this->input->post('description');
 	}
+	
 	
 }
 
