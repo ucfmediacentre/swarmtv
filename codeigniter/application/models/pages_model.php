@@ -23,16 +23,28 @@ class Pages_model extends CI_Model {
 		return $listview;
     }
     
-   function get_page($page_id)
+   function get_page($page_name)
    {
-   		$result = $this->db->get_where('pages', array('id' =>$page_id), 1);
-   		return $result->row();
+   		$result = $this->db->get_where('pages', array('title' =>$page_name), 1);
+   		
+   		if ($result->num_rows() > 0)
+		{ 
+   			return $result->row();
+   		}else
+   		{
+   			return false;
+   		}
    }
    
    public function insert_page($page_title)
    {
    		//$row = array('pages'=>'title','$page_title');
-   		$this->db->insert('pages', $row);
+   		$data = array(
+   			'title' => $page_title
+   			);
+
+		$this->db->insert('pages', $data); 
+   		
    		return $this->db->insert_id();
    }
 
