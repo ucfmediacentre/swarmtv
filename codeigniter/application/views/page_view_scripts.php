@@ -11,12 +11,12 @@ $(document).ready(function(){
 		e.preventDefault();		
 		
 		var idVal = $('input[name="id"]').val();
-		console.log();
+		
 		var descriptionVal = $('textarea[name="description"]').val();
-        console.log(descriptionVal);
-        var keywordsVal = $('input[name="keywords"]').val();
         
-        var publicVal = $('input[name="public"]').val();
+        var keywordsVal = $('textarea[name="keywords"]').val();
+        
+        var publicVal = $('select[name="public"]').val();
 		 
 		$.post(base_url + "index.php/pages/update", { id: idVal , description: descriptionVal, keywords: keywordsVal, public:publicVal },
    			function(data) {
