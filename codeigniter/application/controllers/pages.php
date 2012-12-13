@@ -31,9 +31,9 @@ class Pages extends CI_Controller {
 			
 			// load view with data
 			$this->load->view('header');
-			$this->load->view('page_info_form', $data);
-			$this->load->view('page_view', $data);
-			$this->load->view('page_view_scripts');
+			$this->load->view('pages_view/page_info_form', $data);
+			$this->load->view('pages_view/page_view', $data);
+			$this->load->view('pages_view/page_view_scripts');
 			$this->load->view('footer');
 		}else
 		{
