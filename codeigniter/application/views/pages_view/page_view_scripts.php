@@ -29,9 +29,12 @@ $(document).ready(function(){
 	});
 	
 	$('#content_wrapper').dblclick(function(){
-		console.log("Add Content");
 		
-		
+			
+	});
+	
+	$("a#inline").fancybox({
+		'hideOnContentClick': true
 	});
 });
 
