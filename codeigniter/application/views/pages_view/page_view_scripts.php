@@ -38,7 +38,9 @@ $(document).ready(function(){
 		'width':400,
 		'height':350,
 		'autoDimensions':false,
-		'showCloseButton':false
+		'showCloseButton':false,
+		'title':'Add content',
+		'titlePosition':'inside'
 	});
 });
 
