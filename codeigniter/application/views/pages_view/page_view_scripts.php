@@ -29,12 +29,16 @@ $(document).ready(function(){
 	});
 	
 	$('#content_wrapper').dblclick(function(){
-		
-			
+		$("a#add_content_form_trigger").trigger('click');
 	});
 	
-	$("a#inline").fancybox({
-		'hideOnContentClick': true
+	$("a#add_content_form_trigger").fancybox({
+		'hideOnContentClick': true,
+		'overlayOpacity':0,
+		'width':400,
+		'height':350,
+		'autoDimensions':false,
+		'showCloseButton':false
 	});
 });
 
