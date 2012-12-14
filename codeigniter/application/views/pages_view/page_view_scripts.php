@@ -33,14 +33,9 @@ $(document).ready(function(){
 	});
 	
 	$("a#add_content_form_trigger").fancybox({
-		'hideOnContentClick': true,
 		'overlayOpacity':0,
-		'width':400,
-		'height':350,
-		'autoDimensions':false,
+		'autoDimensions':true,
 		'showCloseButton':false,
-		'title':'Add content',
-		'titlePosition':'inside'
 	});
 });
 

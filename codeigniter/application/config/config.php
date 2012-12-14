@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/~media/swarmtvGit/public/';
+$config['base_url']	= 'http://localhost:8888/swarmtv/public/';
 
 /*
 |--------------------------------------------------------------------------
