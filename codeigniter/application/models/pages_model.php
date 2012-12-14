@@ -18,7 +18,7 @@ class Pages_model extends CI_Model {
 		$listview = '';
 		foreach ($query->result() as $row)
 		{
-    		$listview = $listview . '<a href="' . site_url("pages/view/" . $row->id ) . '">' . $row->title . '</a>';
+    		$listview = $listview . '<a href="' . site_url("pages/view/" . $row->id ) . '">' . $row->title . '</a><br />';
 		}
 		return $listview;
     }
