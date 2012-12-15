@@ -13,7 +13,7 @@ class Pages extends CI_Controller {
 	}
 	
 	
-	public function view($page_title )
+	public function view($page_title)
 	{
 		$this->load->helper('url');
 		
