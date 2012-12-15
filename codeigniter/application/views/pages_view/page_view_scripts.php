@@ -44,10 +44,12 @@ $(document).ready(function(){
 	// init FineUploader 
 	// http://fineuploader.com/fine-uploader-basic-demo.html
 	// *** IMAGE ***
+	
 	var imageUploader = new qq.FineUploader({
       	element: $('#image_uploader')[0],
       	request: {
-        	endpoint: base_url + 'index.php/pages/upload_image' // UPDATE THIS LINK
+        	endpoint: base_url + 'index.php/pages/upload_image', // UPDATE THIS LINK
+        	params: {'name': 'Alcwyn'}
       	},
       	validation: {
         	allowedExtensions: ['jpeg', 'jpg', 'gif', 'png'],
@@ -63,7 +65,7 @@ $(document).ready(function(){
         	},
         	onComplete: function(id, fileName, responseJSON) {
           		if (responseJSON.success) {
-            		console.log("Image upload success");
+            		console.log("Image upload success: " + responseJSON.name);
           		} else {
             		console.log("Image upload failed");
           		}

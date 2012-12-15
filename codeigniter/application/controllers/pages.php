@@ -54,7 +54,7 @@ class Pages extends CI_Controller {
 	
 	public function upload_image()
 	{
-		echo '{"success":true}';
+		echo '{"success":true, "name": "' . $_GET['name'] . '"}';
 	}
 	
 }
