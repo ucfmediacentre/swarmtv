@@ -47,7 +47,7 @@ CREATE  TABLE IF NOT EXISTS `swarmtv`.`content` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `backgroundColor` VARCHAR(16) NULL ,
   `color` VARCHAR(16) NULL ,
-  `contents` BLOB NULL ,
+  `contents` LONGTEXT NULL DEFAULT NULL ,
   `filename` VARCHAR(256) NULL ,
   `fontFamily` VARCHAR(64) NULL ,
   `fontSize` INT NULL ,
