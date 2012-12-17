@@ -1,4 +1,4 @@
-<a class="hidden" id="add_content_form_trigger" href="#add_content_form"> HACK FOR FANCYBOX IMPLEMENTATION </a>
+<a class="hidden" id="content_info_form_trigger" href="#content_info_form"> HACK FOR FANCYBOX IMPLEMENTATION </a>
 
 <!-- omni-content box: will detect exactly what the user wants to do instead of forcing them to make so many choices -->
 <div class="hidden">

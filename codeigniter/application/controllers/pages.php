@@ -33,7 +33,7 @@ class Pages extends CI_Controller {
 			$this->load->view('header');
 			$this->load->view('pages_view/page_info_form', $data);
 			$this->load->view('pages_view/page_view', $data);
-			$this->load->view('pages_view/page_content_form', $data);
+			$this->load->view('pages_view/content_info_form', $data);
 			$this->load->view('pages_view/page_view_scripts');
 			$this->load->view('footer');
 		}else
