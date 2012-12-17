@@ -1,15 +1,21 @@
-<a class="hidden" id="add_content_form_trigger" href="#add_content_form"> HACK FOR FANCYBOX IMPLEMENTATION </a>
+<a class="hidden" id="content_info_form_trigger" href="#content_info_form"> HACK FOR FANCYBOX IMPLEMENTATION </a>
 
 <div class="hidden">
-	<div id="add_content_form">
+	<div id="content_info_form">
 		<div class="tabs">
 			<div class="tab">
 			   <input type="radio" id="tab_1" name="tab_group_1" checked>
 			   <label for="tab_1">Text</label>
 			   
-			   <div class="content">
+			   <!--<div class="content">
 				   <textarea id="content_text"></textarea>
-			   </div> 
+			   </div>-->
+			   <div class="content">
+				   <textarea id="content_text" name="content_text"></textarea>
+				   <input type="hidden" value="<?php echo $page_info->id; ?>" name="page_id" />
+				   <input type="hidden" value="<?php echo $page_info->id; ?>" name="content_id" />
+			       <input type="button" value="Update" id="content_text_submit"/>
+			   </div>
 		   </div>
 			
 		   <div class="tab">

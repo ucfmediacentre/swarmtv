@@ -1,4 +1,4 @@
-// import all the libraries
+<!-- import all the libraries -->
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/fancybox/jquery.fancybox-1.3.4.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/fancybox/jquery.easing-1.3.pack.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/fineuploader.jquery-3.0/jquery.fineuploader-3.0.min.js"></script>
@@ -29,16 +29,29 @@ $(document).ready(function(){
    		});
 	});
 	
+	
 	// init fancy box
-	$("a#add_content_form_trigger").fancybox({
+	$("a#content_info_form_trigger").fancybox({
+		'overlayOpacity':0,
+		'autoDimensions':true,
+		'showCloseButton':false,
+	});
+	
+	$("a#page_info_form_trigger").fancybox({
 		'overlayOpacity':0,
 		'autoDimensions':true,
 		'showCloseButton':false,
 	});
 	
 	// trigger the fancy box on double click
-	$('#content_wrapper').dblclick(function(){
-		$("a#add_content_form_trigger").trigger('click');
+	$('.element').dblclick(function(){
+		//Distinguish between a doubleclick on the title and a doubleclick on an element
+		if($(this).attr('type')=="title"){
+			$("a#page_info_form_trigger").trigger('click');
+		} else {
+			$("a#content_info_form_trigger").trigger('click');
+		}
+		
 	});
 	
 	// init FineUploader 
