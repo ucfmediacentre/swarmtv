@@ -19,6 +19,8 @@
         
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script src="<?php echo base_url(); ?>js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="<?php echo base_url(); ?>libraries/jquery-ui-1.9.2/ui/jquery-ui.js"></script>
+        <script src="<?php echo base_url(); ?>js/vendor/jquery.ui.touch-punch.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
