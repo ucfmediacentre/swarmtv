@@ -94,6 +94,24 @@ $(document).ready(function(){
     });
 });
 
-$('.element').draggable();                                                                                                                                       
+$('.element').each(function(){
+	//alert($(this).attr('type'));
+    switch ($(this).attr('type')) {
+    	case "title":
+    		break;
+		case "text":
+			$(this).draggable().resizable();
+			break;
+    case "image":
+    	$(this).draggable().resizable({ alsoResize: $(this).children() });
+    	break;
+    }
+    /*case "audio":
+    	break;
+    case "movie:
+    	break;
+    }*/
+});
+                                                                                                                                      
 
 </script>
