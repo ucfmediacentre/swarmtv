@@ -116,4 +116,7 @@ $(document).ready(function(){
 	});
 });
 
+$(.element).each(function(){                                                                                                                            
+	$(this).draggable();                                                                                                                                      
+});
 </script>
