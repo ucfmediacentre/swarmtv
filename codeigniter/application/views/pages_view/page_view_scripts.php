@@ -45,10 +45,30 @@ $(document).ready(function(){
 		
 		// check to see if a file has been selected
 		var content_file = $('#content_file').get(0).files[0];
-		if (typeof content_file === "undefined") 
+		var content_text = $('#content_text').val();
+		
+		if (typeof content_file !== "undefined") 
 		{
 			// AJAX to server
-		}
+            var uri = base_url + "/index.php/contents/add";
+            var xhr = new XMLHttpRequest();
+            var fd = new FormData();
+             
+            xhr.open("POST", uri, true);
+            
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Handle response.
+                    alert(xhr.responseText); // handle response.
+                }
+            };
+            
+            fd.append('file', content_file);
+            fd.append('text', content_text);
+            // Initiate a multipart/form-data upload
+            xhr.send(fd);
+        }
+        
 	});
 	
 	// update preview is file is selected
@@ -58,13 +78,15 @@ $(document).ready(function(){
 		var content_file = $('#content_file').get(0).files[0];
 		if (typeof content_file !== "undefined") 
 		{	
+			$('#content_file_info').empty();
+			
 			var imageType = /image.*/;
      
     		if (content_file.type.match(imageType)) {
 				
 				// create thumbnail
 				var img = document.createElement("img");
-				img.classList.add("obj");
+				img.classList.add("thumbnail");
 				img.file = content_file;
 				img.width = 100;
 				$('#content_file_info').append(img);
