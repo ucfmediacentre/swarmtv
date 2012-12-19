@@ -5,9 +5,16 @@ class Contents_model extends CI_Model {
 	var $file_errors = null;
 	var $data_errors = null;
 	var $file = null;
-	var $mime_type = null;
 	var $valid_file = false;
-	var $excepted_mime_types = array ('image/jpeg;', 'image/png;', 'image/gif;', 'image/jpg;', 'image/gif;');
+	
+	var $current_mime_type_index = -1;
+	var $excepted_mime_types = array 	(
+										array('image/jpeg;'	, 'image'),
+										array('image/png;'	, 'image'),
+										array('image/gif;'	, 'image'),
+										array('image/jpg;'	, 'image'),
+										array('image/gif;'	, 'image')
+										);
 	
 	function __construct()
     {
@@ -50,20 +57,44 @@ class Contents_model extends CI_Model {
 		$file_info = new finfo(FILEINFO_MIME);  
 		$mime_type_string = $file_info->buffer(file_get_contents($file['tmp_name']));
 		$mime_type_parts = explode(' ', $mime_type_string);
-		$this->mime_type = $mime_type_parts[0]; 
 		
-		if (!in_array($this->mime_type, $this->excepted_mime_types)) {
-    		$this->file_errors = "The file type is not allowed!";
+		$file_mime_type = $mime_type_parts[0]; 
+		
+		// check mime type against a list of excepted mime types
+		
+		foreach($this->excepted_mime_types as  $index => $type) 
+        { 
+            if (in_array($file_mime_type, $type))
+            {
+            	$this->current_mime_type_index = $index;
+            	break;
+            }
+        } 
+		
+		// send error if the file does not validate
+		if ($this->current_mime_type_index < 0) 
+		{
+			$this->file_errors = "The file type is not allowed!";
 			return false;
 			exit;
 		}
 		
 		return true;
+		/*if (!in_array($this->mime_type, $this->excepted_mime_types)) {
+    		$this->file_errors = "The file type is not allowed!";
+			return false;
+			exit;
+		}*/
 	}
 	
 	function move_file()
 	{
-		
+		 $folder_from_mime_type = $this->excepted_mime_types[$this->current_mime_type_index][1];
+		 $uploads_dir = base_url . 'assets/' . $folder_from_mime_type . '/';
+		 $tmp_name = $_FILES['file']['tmp_name'];
+         
+         $name = uniqid($folder_from_mime_type . '_')
+         move_uploaded_file($tmp_name, "$uploads_dir/$name");	
 	}
 	
 	/*

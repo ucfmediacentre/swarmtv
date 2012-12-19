@@ -12,7 +12,7 @@ class Contents extends CI_Controller {
 		$this->load->model('Contents_model');
 		
 		// check if there is a file to process
-		if($_FILES['size'] > 0){
+		if(sizeof($_FILES) > 0){
        		
        		// check if the file validates
 			$this->Contents_model->validate_file() or exit($this->Contents_model->file_errors);
