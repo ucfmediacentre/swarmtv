@@ -47,11 +47,20 @@ $(document).ready(function(){
 	
 	// trigger the fancy box on double click
 	$('.element').dblclick(function(){
-		//Distinguish between a doubleclick on the title and a doubleclick on an element
-		if($(this).attr('type')=="title"){
-			$("a#page_info_form_trigger").trigger('click');
-		} else {
-			$("a#content_info_form_trigger").trigger('click');
+		//Distinguish between doubleclicks on different elements
+		switch ($(this).attr('type')=="title") {
+			case "title":
+				$("a#page_info_form_trigger").trigger('click');
+				break;
+			case "text":
+				$("a#content_info_form_trigger").trigger('click');
+				break;
+			case "image":
+				break;
+			case "audio":
+				break;
+			case "movie":
+				break;
 		}
 		
 	});
@@ -94,6 +103,9 @@ $(document).ready(function(){
     });
 });
 
+var initDiagonal;
+var initFontSize;
+
 $('.element').each(function(){
 	//alert($(this).attr('type'));
     switch ($(this).attr('type')) {
@@ -101,6 +113,25 @@ $('.element').each(function(){
     		break;
 		case "text":
 			$(this).draggable().resizable();
+			
+			/*$(this).draggable().resizable({
+				create: function(event, ui) {
+					initDiagonal = getContentDiagonal(this);
+					initFontSize = parseInt($(this).css("font-size"));
+				},
+				resize: function(e, ui) {
+					var newDiagonal = getContentDiagonal(this);
+					var ratio = newDiagonal / initDiagonal;
+					
+					$(this).css("font-size", initFontSize + ratio * 3);
+				}
+			});
+			
+			function getContentDiagonal(this) {
+				var contentWidth = $(this).width();
+				var contentHeight = $(this).height();
+				return Math.sqrt(contentWidth * contentWidth + contentHeight * contentHeight);
+			}*/
 			break;
     case "image":
     	$(this).draggable().resizable({ alsoResize: $(this).children() });
@@ -113,5 +144,28 @@ $('.element').each(function(){
     }*/
 });
                                                                                                                                       
+var initDiagonal;
+var initFontSize;
+
+$(function() {
+    $("#resizable").resizable({
+        create: function(event, ui) {
+            initDiagonal = getContentDiagonal();
+            initFontSize = parseInt($("#resizable").css("font-size"));
+        },
+        resize: function(e, ui) {
+            var newDiagonal = getContentDiagonal();
+            var ratio = newDiagonal / initDiagonal;
+            
+            $("#resizable").css({"font-size" : initFontSize*ratio*0.75});
+        }
+    });
+});
+
+function getContentDiagonal() {
+    var contentWidth = $("#resizable").width();
+    var contentHeight = $("#resizable").height();
+    return Math.sqrt(contentWidth * contentWidth + contentHeight * contentHeight);
+}
 
 </script>

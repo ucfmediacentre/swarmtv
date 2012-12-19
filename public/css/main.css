@@ -361,3 +361,5 @@ body,html{
         page-break-after: avoid;
     }
 }
+
+#resizable { width: 150px; height: 150px; font-size: 1em; overflow: visible}
