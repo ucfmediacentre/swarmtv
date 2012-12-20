@@ -8,7 +8,18 @@ foreach ($page_contents as $content)
 {
 	$content_style = 'left:' . $content->x . 'px; top:' . $content->y . 'px;';
 	echo '<div class="content_box" style="' . $content_style . '">';
-	echo $content->description;
+	switch ($content->type){
+		case 'text':		
+			echo $content->description;
+			break;
+		case 'image':
+			echo '<img src="' . base_url() . 'assets/image/' . $content->filename . '" />';
+			break;
+		case 'audio':
+			break;
+		case 'movie':
+			break;
+	}
 	echo '</div>';
 }
 ?>
