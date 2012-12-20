@@ -38,7 +38,7 @@ class Contents_model extends CI_Model {
     function get_all_contents($page_id)
     {
     	$query = $this->db->get_where('contents', array('pages_id' => $page_id));
-		return $query;
+		return $query->result();
     }
 
 	function validate_file()
@@ -149,15 +149,16 @@ class Contents_model extends CI_Model {
 			$this->data_errors = "There was an error adding content to the database";
 			//delete file if there was one?
 			// *** IMPORTANT *** 
-			remove_orthan_file();
+			if ($file) remove_orthan_file();
 			return false;
 			exit;
 		} 
    		return $this->db->insert_id();
 	}
 	
+	// clean up your mess mr parker... no file left behind
 	private function remove_orthan_file()
 	{
-		
+		unlink('assets/' . $this->type . '/' . $filename);	
 	}
 }

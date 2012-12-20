@@ -5,6 +5,12 @@
 
 <?php 
 
+foreach ($page_contents as $content)
+{
+	echo $content->description;
+}
+
+/*
 //Create a div for each piece of text on the page as old SwarmTV used to do;
 $listview = '';
 $temp_x =200;
@@ -15,6 +21,7 @@ foreach ($page_contents->result() as $row)
 	$temp_y = $temp_y+200;
 }
 echo $listview;
+*/
 ?>
 </div>
 
