@@ -4,10 +4,21 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/fineuploader.jquery-3.0/jquery.fineuploader-3.0.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js"></script>
 <script src="<?php echo base_url(); ?>js/vendor/jquery.ui.touch-punch.min.js"></script>
+<<<<<<< HEAD
 <script type="text/javascript">
 
 // Save the base url as a javascript variable
 var base_url = "<?php echo base_url(); ?>";
+=======
+
+<script type="text/javascript">
+
+// Save the base url as a javascript variable
+var base_url = "<?php echo base_url(); ?>";                                                                                                                                      
+var initDiagonal;
+var initFontSize = 24;
+var elementProperties = new Object();
+>>>>>>> updatingDatabase
 
 $(document).ready(function(){
 	
@@ -46,11 +57,21 @@ $(document).ready(function(){
 	
 	// trigger the fancy box on double click
 	$('.element').dblclick(function(){
-		//Distinguish between a doubleclick on the title and a doubleclick on an element
-		if($(this).attr('type')=="title"){
-			$("a#page_info_form_trigger").trigger('click');
-		} else {
-			$("a#content_info_form_trigger").trigger('click');
+
+		//Distinguish between doubleclicks on different elements
+		switch ($(this).attr('type')=="title") {
+			case "title":
+				$("a#page_info_form_trigger").trigger('click');
+				break;
+			case "text":
+				$("a#content_info_form_trigger").trigger('click');
+				break;
+			case "image":
+				break;
+			case "audio":
+				break;
+			case "movie":
+				break;
 		}
 		
 	});
@@ -138,5 +159,118 @@ $('.element').each(function(){
     }*/
 });
                                                                                                                                       
+
+var initDiagonal;
+var initFontSize;
+
+$('.element').each(function(){
+	//alert($(this).attr('type'));
+    switch ($(this).attr('type')) {
+    	case "title":
+    		break;
+		case "text":
+			$(this).draggable({
+				stop: function(event, ui) {
+					updateElementProperties($(this).attr('id'));
+				}
+			}).resizable();
+			
+			/*$(this).draggable().resizable({
+				create: function(event, ui) {
+					initDiagonal = getContentDiagonal(this);
+					initFontSize = parseInt($(this).css("font-size"));
+				},
+				resize: function(e, ui) {
+					var newDiagonal = getContentDiagonal(this);
+					var ratio = newDiagonal / initDiagonal;
+					
+					$(this).css("font-size", initFontSize + ratio * 3);
+				}
+			});
+			
+			function getContentDiagonal(this) {
+				var contentWidth = $(this).width();
+				var contentHeight = $(this).height();
+				return Math.sqrt(contentWidth * contentWidth + contentHeight * contentHeight);
+			}*/
+			break;
+    case "image":
+    	$(this).draggable().resizable({ alsoResize: $(this).children() });
+    	break;
+    }
+    /*case "audio":
+    	break;
+    case "movie:
+    	break;
+    }*/
+});
+
+
+$(function() {
+    $("#resizable").resizable({
+        create: function(event, ui) {
+            initDiagonal = getContentDiagonal();
+            initFontSize = parseInt($("#resizable").css("font-size"));
+        },
+        resize: function(e, ui) {
+            var newDiagonal = getContentDiagonal();
+            var ratio = newDiagonal / initDiagonal;
+            
+            $("#resizable").css({"font-size" : initFontSize*ratio*0.75});
+        }
+    });
+});
+
+function getContentDiagonal() {
+    var contentWidth = $("#resizable").width();
+    var contentHeight = $("#resizable").height();
+    return Math.sqrt(contentWidth * contentWidth + contentHeight * contentHeight);
+}
+
+function updateElementProperties(elementId){
+  	var elementType = $('#'+elementId).attr('type');
+	switch (elementType){
+	case "text":
+		alert($('#'+elementId).css('left'));
+		elementProperties["attribution"] = "";
+		elementProperties["backgroundColor"] = $('#'+elementId).css('backgroundColor');
+		elementProperties["color"] = $('#'+elementId).css('color');
+		elementProperties["content"] = $('#'+elementId).text();
+		elementProperties["description"] = "";
+		elementProperties["filename"] = "";
+		elementProperties["fontFamily"] = $('#'+elementId).css('fontFamily');
+		elementProperties["fontSize"] = $('#'+elementId).css('font-size');
+		elementProperties["height"] = $('#'+elementId).css('height');
+		elementProperties["id"] = elementId;
+		elementProperties["keywords"] = "";
+		elementProperties["license"] = "";
+		elementProperties["opacity"] = $('#'+elementId).css('opacity');
+		elementProperties["page_id"] = $('#'+elementId).attr('pages_id');
+		elementProperties["textAlign"] = $('#'+elementId).css('text-align');
+		elementProperties["timeline"] = "";
+		elementProperties["type"] = elementType;
+		elementProperties["width"] = $('#'+elementId).css('width');
+		elementProperties["x"] = $('#'+elementId).css('left');
+		elementProperties["y"] = $('#'+elementId).css('top');
+		elementProperties["z"] = $('#'+elementId).css('z-index');
+		break;
+	}
+	// Ajax the values to the pages controller  
+		alert(JSON.stringify(elementProperties));
+		/*$.ajax(base_url + "index.php/pages/updateElement(elementProperties)",
+   			function(data) {
+   			// User feed back
+     		alert("Element updated: " + data);
+   		});*/
+   		$.ajax({
+			url: base_url + 'index.php/pages/updateElement',
+			data: JSON.stringify(elementProperties),
+			type: 'POST',
+			success: function(data, status)
+			{
+				alert("Returned data = "+data);
+			}
+		});
+}
 
 </script>

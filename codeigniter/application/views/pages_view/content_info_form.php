@@ -1,18 +1,61 @@
 <a class="hidden" id="content_info_form_trigger" href="#content_info_form"> HACK FOR FANCYBOX IMPLEMENTATION </a>
 
-<!-- omni-content box: will detect exactly what the user wants to do instead of forcing them to make so many choices -->
 <div class="hidden">
-	<div id="add_content_form_wrapper">
-		<form id="add_content_form" >
-			<h2> Add Content </h2>	
-			<p id="content_file_info"> </p>
-			<label for="content_file">Choose a file:</label>
-			<input type="file" name="content_file" id="content_file" /><br />
+	<div id="content_info_form">
+		<div class="tabs">
+			<div class="tab">
+			   <input type="radio" id="tab_1" name="tab_group_1" checked>
+			   <label for="tab_1">Text</label>
+			   
+			   <!--<div class="content">
+				   <textarea id="content_text"></textarea>
+			   </div>-->
+			   <div class="content">
+				   <textarea id="content_text" name="content_text"></textarea>
+				   <input type="hidden" value="<?php echo $page_info->id; ?>" name="page_id" />
+				   <input type="hidden" value="<?php echo $page_info->id; ?>" name="content_id" />
+			       <input type="button" value="Update" id="content_text_submit"/>
+			   </div>
+		   </div>
 			
-			<label for="content_text">Add some text:</label><br />
-			<textarea id="content_text" place-holder="TEXT"> </textarea> <br />
+		   <div class="tab">
+			   <input type="radio" id="tab_2" name="tab_group_1">
+			   <label for="tab_2">Images</label>
+			   
+			   <div class="content">
+				   <div id="image_uploader"></div>
+						<div id="trigger_image_uploader" class="btn btn-primary" style="margin-top: 10px;">
+						  	<i class="icon-upload icon-white"></i> Upload now
+						</div>
+			   </div> 
+		   </div>
 			
-			<input type="submit" id="submit_content" value="Submit" /> 
-		</form>
+			<div class="tab">
+			   <input type="radio" id="tab_3" name="tab_group_1">
+			   <label for="tab_3">Audio</label>
+			 
+			   <div class="content">
+				   stuff
+			   </div> 
+		   </div>
+		   
+		   <div class="tab">
+			   <input type="radio" id="tab_4" name="tab_group_1">
+			   <label for="tab_4">Movies</label>
+			 
+			   <div class="content">
+				   stuff
+			   </div> 
+		   </div>
+	
+			<div class="tab">
+			   <input type="radio" id="tab_5" name="tab_group_1">
+			   <label for="tab_5">Upload</label>
+			 
+			   <div class="content">
+				   stuff
+			   </div> 
+		   </div>
+		</div>
 	</div>
 </div>
