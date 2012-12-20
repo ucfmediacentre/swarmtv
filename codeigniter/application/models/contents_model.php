@@ -80,11 +80,6 @@ class Contents_model extends CI_Model {
 		}
 		
 		return true;
-		/*if (!in_array($this->mime_type, $this->excepted_mime_types)) {
-    		$this->file_errors = "The file type is not allowed!";
-			return false;
-			exit;
-		}*/
 	}
 	
 	function move_file()
@@ -93,8 +88,8 @@ class Contents_model extends CI_Model {
 		 $uploads_dir = base_url . 'assets/' . $folder_from_mime_type . '/';
 		 $tmp_name = $_FILES['file']['tmp_name'];
          
-         $name = uniqid($folder_from_mime_type . '_')
-         move_uploaded_file($tmp_name, "$uploads_dir/$name");	
+         $name = uniqid($folder_from_mime_type . '_');
+        // move_uploaded_file($tmp_name, "$uploads_dir/$name");	
 	}
 	
 	/*

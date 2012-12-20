@@ -50,7 +50,7 @@ $(document).ready(function(){
 		if (typeof content_file !== "undefined") 
 		{
 			// AJAX to server
-            var uri = base_url + "/index.php/contents/add";
+            var uri = base_url + "index.php/contents/add";
             var xhr = new XMLHttpRequest();
             var fd = new FormData();
              
