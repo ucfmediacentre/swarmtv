@@ -35,8 +35,11 @@ $(document).ready(function(){
 	});
 	
 	// trigger the fancy box on double click
-	$('#content_wrapper').dblclick(function(){
+	$('#content_wrapper').dblclick(function(e){
 		$("a#add_content_form_trigger").trigger('click');
+		
+		$('input[name="x"]').val(e.pageX);
+		$('input[name="y"]').val(e.pageY);
 	});
 	
 	// Ajax for adding content
@@ -46,6 +49,8 @@ $(document).ready(function(){
 		var content_file = $('#content_file').get(0).files[0];
 		var content_description = $('#content_description').val();
 		var pages_id = $('input[name="pages_id"]').val();
+		var x = $('input[name="x"]').val();
+		var y = $('input[name="y"]').val();
 		
 		// AJAX to server
 		var uri = base_url + "index.php/contents/add";
@@ -66,6 +71,8 @@ $(document).ready(function(){
 		
 		fd.append('description', content_description);
 		fd.append('pages_id', pages_id);
+		fd.append('x', x);
+		fd.append('y', y);
 		// Initiate a multipart/form-data upload
 		xhr.send(fd);
         

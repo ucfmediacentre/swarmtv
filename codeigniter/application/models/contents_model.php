@@ -138,6 +138,12 @@ class Contents_model extends CI_Model {
 			return false;
 			exit;
 		}
+		
+		if (array_key_exists('x', $post_data) && array_key_exists('y', $post_data))
+		{
+			// check x and y are integers
+		}
+		
 		return true;
 	}
 	

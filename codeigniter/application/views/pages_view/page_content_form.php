@@ -16,6 +16,8 @@
 			
 			<!-- hidden values -->
 			<input type="hidden" name="pages_id" value="<?php echo $page_info->id; ?>"/>
+			<input type="hidden" name="x" value="400"/>
+			<input type="hidden" name="y" value="400"/>
 		</form>
 	</div>
 </div>

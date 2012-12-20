@@ -134,6 +134,10 @@ textarea#content_description{
 	margin:auto;
 	height:100px;
 }
+.content_box{
+	padding:10px;
+	position:absolute;	
+}
 
 
 
