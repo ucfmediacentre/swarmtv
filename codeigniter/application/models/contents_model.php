@@ -94,6 +94,9 @@ class Contents_model extends CI_Model {
 		
 		$full_name = $unique_name . '.' . $extension;
 		
+		$this->data['filename'] = $full_name;
+		$this->data['type'] = $folder_from_mime_type;
+		
 		return move_uploaded_file($_FILES['file']['tmp_name'], 'assets/' . $folder_from_mime_type . '/' . $full_name);	
 	}
 	
@@ -111,13 +114,26 @@ class Contents_model extends CI_Model {
 			$description = $post_data['description'];
 			$description = htmlspecialchars($description, ENT_QUOTES);
 			$this->data['description'] = $description;
-			
-			echo htmlspecialchars_decode($description);
 		}
+		
+		// check pages_id
+		if (array_key_exists('pages_id', $post_data))
+		{	
+			$pages_id = $post_data['pages_id'];
+			$this->data['pages_id'] = $pages_id;
+		}else
+		{
+			// should probably check to see if a page exist with this id as well?
+			$this->data_errors = "There was no page assigned to the content!";
+			return false;
+			exit;
+		}
+		return true;
 	}
 	
 	function add_content_to_database()
 	{
-		
+		$this->db->insert('contents', $this->data); 
+   		return $this->db->insert_id();
 	}
 }

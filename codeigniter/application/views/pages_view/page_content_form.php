@@ -13,6 +13,9 @@
 			<textarea id="content_description" > </textarea> <br />
 			
 			<input type="submit" id="submit_content" value="Submit" /> 
+			
+			<!-- hidden values -->
+			<input type="hidden" name="pages_id" value="<?php echo $page_info->id; ?>"/>
 		</form>
 	</div>
 </div>

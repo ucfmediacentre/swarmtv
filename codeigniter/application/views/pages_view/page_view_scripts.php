@@ -43,31 +43,31 @@ $(document).ready(function(){
 	$('#submit_content').click(function(e){
 		e.preventDefault();
 		
-		// check to see if a file has been selected
 		var content_file = $('#content_file').get(0).files[0];
 		var content_description = $('#content_description').val();
+		var pages_id = $('input[name="pages_id"]').val();
 		
-		if (typeof content_file !== "undefined") 
-		{
-			// AJAX to server
-            var uri = base_url + "index.php/contents/add";
-            var xhr = new XMLHttpRequest();
-            var fd = new FormData();
-             
-            xhr.open("POST", uri, true);
-            
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    // Handle response.
-                    alert(xhr.responseText); // handle response.
-                }
-            };
-            
-            fd.append('file', content_file);
-            fd.append('description', content_description);
-            // Initiate a multipart/form-data upload
-            xhr.send(fd);
-        }
+		// AJAX to server
+		var uri = base_url + "index.php/contents/add";
+		var xhr = new XMLHttpRequest();
+		var fd = new FormData();
+		 
+		xhr.open("POST", uri, true);
+		
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				// Handle response.
+				alert(xhr.responseText); // handle response.
+			}
+		};
+		
+		// check to see if a file has been selected 
+		if (typeof content_file !== "undefined") fd.append('file', content_file);
+		
+		fd.append('description', content_description);
+		fd.append('pages_id', pages_id);
+		// Initiate a multipart/form-data upload
+		xhr.send(fd);
         
 	});
 	
