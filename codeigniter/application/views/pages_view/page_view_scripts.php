@@ -8,7 +8,10 @@
 <script type="text/javascript">
 
 // Save the base url as a javascript variable
-var base_url = "<?php echo base_url(); ?>";
+var base_url = "<?php echo base_url(); ?>";                                                                                                                                      
+var initDiagonal;
+var initFontSize = 24;
+var elementProperties = new Object();
 
 $(document).ready(function(){
 	
@@ -112,7 +115,11 @@ $('.element').each(function(){
     	case "title":
     		break;
 		case "text":
-			$(this).draggable().resizable();
+			$(this).draggable({
+				stop: function(event, ui) {
+					updateElementProperties($(this).attr('id'));
+				}
+			}).resizable();
 			
 			/*$(this).draggable().resizable({
 				create: function(event, ui) {
@@ -143,9 +150,7 @@ $('.element').each(function(){
     	break;
     }*/
 });
-                                                                                                                                      
-var initDiagonal;
-var initFontSize;
+
 
 $(function() {
     $("#resizable").resizable({
@@ -166,6 +171,36 @@ function getContentDiagonal() {
     var contentWidth = $("#resizable").width();
     var contentHeight = $("#resizable").height();
     return Math.sqrt(contentWidth * contentWidth + contentHeight * contentHeight);
+}
+
+function updateElementProperties(elementId){
+  	var elementType = $('#'+elementId).attr('type');
+	switch (elementType){
+	case "text":
+		//alert($('#'+elementId).css('left'));
+		elementProperties["attribution"] = "";
+		elementProperties["backgroundColor"] = $('#'+elementId).css('backgroundColor');
+		elementProperties["color"] = $('#'+elementId).css('color');
+		elementProperties["content"] = $('#'+elementId).text();
+		elementProperties["description"] = "";
+		elementProperties["filename"] = "";
+		elementProperties["fontFamily"] = $('#'+elementId).css('fontFamily');
+		elementProperties["fontSize"] = $('#'+elementId).css('font-size');
+		elementProperties["height"] = $('#'+elementId).css('height');
+		elementProperties["id"] = elementId;
+		elementProperties["keywords"] = "";
+		elementProperties["license"] = "";
+		elementProperties["opacity"] = $('#'+elementId).css('opacity');
+		elementProperties["page_id"] = $('#'+elementId).attr('pages_id');
+		elementProperties["textAlign"] = $('#'+elementId).css('text-align');
+		elementProperties["timeline"] = "";
+		elementProperties["type"] = elementType;
+		elementProperties["width"] = $('#'+elementId).css('width');
+		elementProperties["x"] = $('#'+elementId).css('left');
+		elementProperties["y"] = $('#'+elementId).css('top');
+		elementProperties["z"] = $('#'+elementId).css('z-index');
+	break;
+	}
 }
 
 </script>
