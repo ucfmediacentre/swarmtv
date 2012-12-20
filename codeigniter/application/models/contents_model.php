@@ -15,6 +15,8 @@ class Contents_model extends CI_Model {
 										array('image/jpg;'	, 'image'),
 										array('image/gif;'	, 'image')
 										);
+										
+	var $data = array();
 	
 	function __construct()
     {
@@ -81,17 +83,18 @@ class Contents_model extends CI_Model {
 	}
 	
 	function move_file()
-	{	
-		 // construct the location from the data
-		 $folder_from_mime_type = $this->excepted_mime_types[$this->current_mime_type_index][1];  // image / audio / movie folder
-		 $uploads_dir = base_url() . 'assets/' . $folder_from_mime_type . '/';
-		 
-		 $extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-    	 $unique_name = $folder_from_mime_type . '-' . uniqid();
-    	 
-    	 $full_name = $unique_name . '.' . $extension;
-    	 
-    	 return move_uploaded_file($_FILES['file']['tmp_name'], 'assets/' . $folder_from_mime_type . '/' . $full_name);	
+	{	 
+		// Consider creating a folder every new month so that content is easier to find? 
+		// construct the location from the data
+		$folder_from_mime_type = $this->excepted_mime_types[$this->current_mime_type_index][1];  // image / audio / movie folder
+		$uploads_dir = base_url() . 'assets/' . $folder_from_mime_type . '/';
+		
+		$extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+		$unique_name = $folder_from_mime_type . '-' . uniqid();
+		
+		$full_name = $unique_name . '.' . $extension;
+		
+		return move_uploaded_file($_FILES['file']['tmp_name'], 'assets/' . $folder_from_mime_type . '/' . $full_name);	
 	}
 	
 	/*
@@ -100,11 +103,21 @@ class Contents_model extends CI_Model {
 	*/
 	function validate_data()
 	{
-		
+		// Check the basic data - then filter the rest later
+		// filter main text
+		$post_data = $this->input->post(NULL, TRUE); // return all post data filtered XSS - SCRIPT SAFE
+		if (array_key_exists('description', $post_data))
+		{
+			$description = $post_data['description'];
+			$description = htmlspecialchars($description, ENT_QUOTES);
+			$this->data['description'] = $description;
+			
+			echo htmlspecialchars_decode($description);
+		}
 	}
 	
 	function add_content_to_database()
 	{
-	
+		
 	}
 }

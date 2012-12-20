@@ -45,7 +45,7 @@ $(document).ready(function(){
 		
 		// check to see if a file has been selected
 		var content_file = $('#content_file').get(0).files[0];
-		var content_text = $('#content_text').val();
+		var content_description = $('#content_description').val();
 		
 		if (typeof content_file !== "undefined") 
 		{
@@ -64,7 +64,7 @@ $(document).ready(function(){
             };
             
             fd.append('file', content_file);
-            fd.append('text', content_text);
+            fd.append('description', content_description);
             // Initiate a multipart/form-data upload
             xhr.send(fd);
         }

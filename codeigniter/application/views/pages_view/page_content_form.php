@@ -9,8 +9,8 @@
 			<label for="content_file">Choose a file:</label>
 			<input type="file" name="content_file" id="content_file" /><br />
 			
-			<label for="content_text">Add some text:</label><br />
-			<textarea id="content_text" place-holder="TEXT"> </textarea> <br />
+			<label for="content_description">Add some text:</label><br />
+			<textarea id="content_description" > </textarea> <br />
 			
 			<input type="submit" id="submit_content" value="Submit" /> 
 		</form>
