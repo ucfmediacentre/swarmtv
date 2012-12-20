@@ -43,52 +43,55 @@ class Contents_model extends CI_Model {
     
     public function updateElement()
    {
-   		echo "contents_model/updateElement : ";
-   		//var elementProperties = $elementProperties;
-   		$data = json_decode($_POST['data']); 
-   		echo $data;
-   		//$elementProperties = $this->input->post('elementProperties');
-   		//echo $this->input->post('content');
+   		$elementData = json_decode($_POST['elementData']);
+		$attribution = $elementData->{'attribution'};
+		$backgroundColor = $elementData->{'backgroundColor'};
+		$color = $elementData->{'color'};
+		$content = $elementData->{'content'};
+		$description = $elementData->{'description'};
+		$filename = $elementData->{'filename'};
+		$fontFamily = $elementData->{'fontFamily'};
+		$fontSize = $elementData->{'fontSize'};
+		$height = $elementData->{'height'};
+		$id = $elementData->{'id'};
+		$keywords = $elementData->{'keywords'};
+		$license = $elementData->{'license'};
+		$opacity = $elementData->{'opacity'};
+		$pages_id = $elementData->{'pages_id'};
+		$textAlign = $elementData->{'textAlign'};
+		$timeline = $elementData->{'timeline'};
+		$type = $elementData->{'type'};
+		$width = $elementData->{'width'};
+		$x = $elementData->{'x'};
+		$y = $elementData->{'y'};
+		$z = $elementData->{'z'};
    		
-   		//alert($elementProperties);
-   		/*$id = $this->input->post('id');
-   		$description = $this->input->post('description');
-   		$keywords = $this->input->post('keywords');
-   		$public = $this->input->post('public');*/
-   		
-   		$data = $elementProperties;
-               /*'attribution' => elementProperties["attribution"];
-               'backgroundColor' => elementProperties["backgroundColor"];
-               'color' => elementProperties["color"];
-               'content' => elementProperties["content"];
-               'description' => elementProperties["description"];
-               'filename' => elementProperties["filename"];
-               'backgroundColor' => elementProperties["fontFamily"];
-               'backgroundColor' => elementProperties["fontSize"];
-               'backgroundColor' => elementProperties["height"];
-               'backgroundColor' => elementProperties["id"];
-               'backgroundColor' => elementProperties["keywords"];
-               'backgroundColor' => elementProperties["license"];
-               'backgroundColor' => elementProperties["opacity"];
-               'backgroundColor' => elementProperties["page_id"];
-               'backgroundColor' => elementProperties["textAlign"];
-               'backgroundColor' => elementProperties["timeline"];
-               'backgroundColor' => elementProperties["type"];
-               'backgroundColor' => elementProperties["width"];
-               'backgroundColor' => elementProperties["x"];
-               'backgroundColor' => elementProperties["y"];
-               'backgroundColor' => elementProperties["z"];
-   		
-	   	$data = array(
+		$data = array(
+               'attribution' => $attribution,
+               'backgroundColor' => $backgroundColor,
+               'content' => $content,
                'description' => $description,
+               'filename' => $filename,
+               'fontFamily' => $fontFamily,
+               'fontSize' => $fontSize,
+               'height' => $height,
+               'id' => $id,
                'keywords' => $keywords,
-               'public' => $public
-            );*/
+               'license' => $license,
+               'opacity' => $opacity,
+               'pages_id' => $pages_id,
+               'textAlign' => $textAlign,
+               'timeline' => $timeline,
+               'type' => $type,
+               'width' => $width,
+               'x' => $x,
+               'y' => $y,
+               'z' => $z
+		   );
 
-		//$this->db->where('id', $elementProperties["id"]);
-		//$this->db->update('contents', $data); 
-		//return $this->db->affected_rows();
-		//return $elementProperties;
+		$this->db->where('id', $data["id"]);
+		$this->db->update('contents', $data); 
+		return $this->db->affected_rows();
    }
 
 	function validate_file()

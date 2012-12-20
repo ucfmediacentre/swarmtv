@@ -143,30 +143,7 @@ $(document).ready(function(){
 	});
 });
 
-$('.element').each(function(){
-	//alert($(this).attr('type'));
-    switch ($(this).attr('type')) {
-    	case "title":
-    		break;
-		case "text":
-			$(this).draggable().resizable();
-			break;
-    case "image":
-    	$(this).draggable().resizable({ alsoResize: $(this).children() });
-    	break;
-    }
-    /*case "audio":
-    	break;
-    case "movie:
-    	break;
-    }*/
-});
-                                                                                                                                      
-
-var initDiagonal;
-var initFontSize;
-
-$('.element').each(function(){
+                                                                                                                                      $('.element').each(function(){
 	//alert($(this).attr('type'));
     switch ($(this).attr('type')) {
     	case "title":
@@ -234,7 +211,7 @@ function updateElementProperties(elementId){
   	var elementType = $('#'+elementId).attr('type');
 	switch (elementType){
 	case "text":
-		alert($('#'+elementId).css('left'));
+		//alert($('#'+elementId).css('left'));
 		elementProperties["attribution"] = "";
 		elementProperties["backgroundColor"] = $('#'+elementId).css('backgroundColor');
 		elementProperties["color"] = $('#'+elementId).css('color');
@@ -248,7 +225,7 @@ function updateElementProperties(elementId){
 		elementProperties["keywords"] = "";
 		elementProperties["license"] = "";
 		elementProperties["opacity"] = $('#'+elementId).css('opacity');
-		elementProperties["page_id"] = $('#'+elementId).attr('pages_id');
+		elementProperties["pages_id"] = $('#'+elementId).attr('pages_id');
 		elementProperties["textAlign"] = $('#'+elementId).css('text-align');
 		elementProperties["timeline"] = "";
 		elementProperties["type"] = elementType;
@@ -259,19 +236,13 @@ function updateElementProperties(elementId){
 		break;
 	}
 	// Ajax the values to the pages controller  
-		alert(JSON.stringify(elementProperties));
-		/*$.ajax(base_url + "index.php/pages/updateElement(elementProperties)",
-   			function(data) {
-   			// User feed back
-     		alert("Element updated: " + data);
-   		});*/
    		$.ajax({
 			url: base_url + 'index.php/pages/updateElement',
-			data: JSON.stringify(elementProperties),
+			data: 'elementData=' + JSON.stringify(elementProperties),
 			type: 'POST',
 			success: function(data, status)
 			{
-				alert("Returned data = "+data);
+				//alert("Returned data = "+data);
 			}
 		});
 }
