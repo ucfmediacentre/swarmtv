@@ -177,7 +177,7 @@ function updateElementProperties(elementId){
   	var elementType = $('#'+elementId).attr('type');
 	switch (elementType){
 	case "text":
-		//alert($('#'+elementId).css('left'));
+		alert($('#'+elementId).css('left'));
 		elementProperties["attribution"] = "";
 		elementProperties["backgroundColor"] = $('#'+elementId).css('backgroundColor');
 		elementProperties["color"] = $('#'+elementId).css('color');
@@ -199,8 +199,24 @@ function updateElementProperties(elementId){
 		elementProperties["x"] = $('#'+elementId).css('left');
 		elementProperties["y"] = $('#'+elementId).css('top');
 		elementProperties["z"] = $('#'+elementId).css('z-index');
-	break;
+		break;
 	}
+	// Ajax the values to the pages controller  
+		alert(JSON.stringify(elementProperties));
+		/*$.ajax(base_url + "index.php/pages/updateElement(elementProperties)",
+   			function(data) {
+   			// User feed back
+     		alert("Element updated: " + data);
+   		});*/
+   		$.ajax({
+			url: base_url + 'index.php/pages/updateElement',
+			data: JSON.stringify(elementProperties),
+			type: 'POST',
+			success: function(data, status)
+			{
+				alert("Returned data = "+data);
+			}
+		});
 }
 
 </script>

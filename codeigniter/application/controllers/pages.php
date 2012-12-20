@@ -52,6 +52,13 @@ class Pages extends CI_Controller {
 		echo $this->Pages_model->update() . " " . $this->input->post('keywords');
 	}
 	
+	public function updateElement()
+	{
+		echo "pages/updateElement : ";
+		$this->load->model('Contents_model');
+		echo $this->Contents_model->updateElement();
+	}
+	
 	public function upload_image()
 	{
 		echo '{"success":true, "name": "' . $_GET['name'] . '"}';
