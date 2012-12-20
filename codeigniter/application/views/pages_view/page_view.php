@@ -10,10 +10,10 @@ foreach ($page_contents as $content)
 	echo '<div class="content_box" style="' . $content_style . '">';
 	switch ($content->type){
 		case 'text':		
-			echo $content->description;
+			echo htmlspecialchars_decode($content->description);
 			break;
 		case 'image':
-			echo '<img src="' . base_url() . 'assets/image/' . $content->filename . '" />';
+			echo "<img width=\"$content->width\" src=\"" . base_url() . "assets/image/$content->filename\" />";
 			break;
 		case 'audio':
 			break;
