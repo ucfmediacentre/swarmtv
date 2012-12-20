@@ -4,7 +4,7 @@ class Contents_model extends CI_Model {
 
 	var $file_errors = null;
 	var $data_errors = null;
-	var $file = null;
+	var $file = false;				// is a file present on the server?
 	var $valid_file = false;
 	
 	var $current_mime_type_index = -1;
@@ -15,6 +15,8 @@ class Contents_model extends CI_Model {
 										array('image/jpg;'	, 'image'),
 										array('image/gif;'	, 'image')
 										);
+										
+	var $data = array();
 	
 	function __construct()
     {
@@ -36,7 +38,7 @@ class Contents_model extends CI_Model {
     function get_all_contents($page_id)
     {
     	$query = $this->db->get_where('contents', array('pages_id' => $page_id));
-		return $query;
+		return $query->result();
     }
     
     public function updateElement()
@@ -111,7 +113,6 @@ class Contents_model extends CI_Model {
 		$file_mime_type = $mime_type_parts[0]; 
 		
 		// check mime type against a list of excepted mime types
-		
 		foreach($this->excepted_mime_types as  $index => $type) 
         { 
             if (in_array($file_mime_type, $type))
@@ -128,23 +129,35 @@ class Contents_model extends CI_Model {
 			return false;
 			exit;
 		}
-		
-		return true;
-		/*if (!in_array($this->mime_type, $this->excepted_mime_types)) {
-    		$this->file_errors = "The file type is not allowed!";
-			return false;
-			exit;
-		}*/
+		return true;			// the file validates
 	}
 	
 	function move_file()
-	{
-		 $folder_from_mime_type = $this->excepted_mime_types[$this->current_mime_type_index][1];
-		 $uploads_dir = base_url . 'assets/' . $folder_from_mime_type . '/';
-		 $tmp_name = $_FILES['file']['tmp_name'];
-         
-         $name = uniqid($folder_from_mime_type . '_');
-         move_uploaded_file($tmp_name, "$uploads_dir/$name");	
+	{	 
+		// Consider creating a folder every new month so that content is easier to find? 
+		// construct the location from the data
+		$folder_from_mime_type = $this->excepted_mime_types[$this->current_mime_type_index][1];  // image / audio / movie folder
+		$uploads_dir = base_url() . 'assets/' . $folder_from_mime_type . '/';
+		
+		$extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+		$unique_name = $folder_from_mime_type . '-' . uniqid();
+		
+		$full_name = $unique_name . '.' . $extension;
+		
+		$this->data['filename'] = $full_name;
+		$this->data['type'] = $folder_from_mime_type;
+		
+		$success = move_uploaded_file($_FILES['file']['tmp_name'], 'assets/' . $folder_from_mime_type . '/' . $full_name);	
+		
+		if ($success){
+			$file = true;
+		}else
+		{
+			$this->file_errors = "An error occurred when moving the file on the server!";
+			return false;
+			exit;
+		} 
+		return true;
 	}
 	
 	/*
@@ -153,11 +166,69 @@ class Contents_model extends CI_Model {
 	*/
 	function validate_data()
 	{
+		// Check the basic data - then filter the rest later
+		// filter main text
+		$post_data = $this->input->post(NULL, TRUE); // return all post data filtered XSS - SCRIPT SAFE
+		if (array_key_exists('description', $post_data))
+		{
+			$description = $post_data['description'];
+			$description = htmlspecialchars($description, ENT_QUOTES);
+			$this->data['description'] = $description;
+		}
 		
+		// check pages_id
+		if (array_key_exists('pages_id', $post_data))
+		{	
+			$pages_id = $post_data['pages_id'];
+			$this->data['pages_id'] = $pages_id;
+		}else
+		{
+			// should probably check to see if a page exist with this id as well?
+			$this->data_errors = "There was no page assigned to the content!";
+			return false;
+			exit;
+		}
+		
+		if (array_key_exists('x', $post_data) && array_key_exists('y', $post_data))
+		{
+			$x = $post_data['x'];
+			$y = $post_data['y'];
+			
+			echo $x . ' ' . $y;
+			// check x and y are integers
+			if (filter_var($x, FILTER_VALIDATE_INT) && filter_var($x, FILTER_VALIDATE_INT))
+			{
+				$this->data['x'] = $x;
+				$this->data['y'] = $y;
+			}else
+			{
+				$this->data_errors = "Position values are incorrect!";
+				return false;
+				exit;
+			}
+		}
+		
+		return true;
 	}
 	
 	function add_content_to_database()
 	{
+		if (!$this->db->insert('contents', $this->data))
+		{
+			// should probably check to see if a page exist with this id as well?
+			$this->data_errors = "There was an error adding content to the database";
+			//delete file if there was one?
+			// *** IMPORTANT *** 
+			if ($file) remove_orthan_file();
+			return false;
+			exit;
+		} 
+   		return $this->db->insert_id();
+	}
 	
+	// clean up your mess mr parker... no file left behind
+	private function remove_orthan_file()
+	{
+		unlink('assets/' . $this->type . '/' . $filename);	
 	}
 }

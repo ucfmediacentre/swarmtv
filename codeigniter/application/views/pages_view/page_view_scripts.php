@@ -1,4 +1,4 @@
-<!-- import all the libraries -->
+
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/fancybox/jquery.fancybox-1.3.4.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/fancybox/jquery.easing-1.3.pack.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/fineuploader.jquery-3.0/jquery.fineuploader-3.0.min.js"></script>
@@ -48,6 +48,7 @@ $(document).ready(function(){
 	});
 	
 	// trigger the fancy box on double click
+
 	$('.element').dblclick(function(){
 
 		//Distinguish between doubleclicks on different elements
@@ -64,39 +65,49 @@ $(document).ready(function(){
 				break;
 			case "movie":
 				break;
-		}
+	}
 		
+	$('#content_wrapper').dblclick(function(e){
+		$("a#add_content_form_trigger").trigger('click');
+		
+		$('input[name="x"]').val(e.pageX);
+		$('input[name="y"]').val(e.pageY);
+
 	});
 	
 	// Ajax for adding content
 	$('#submit_content').click(function(e){
 		e.preventDefault();
 		
-		// check to see if a file has been selected
 		var content_file = $('#content_file').get(0).files[0];
-		var content_text = $('#content_text').val();
+		var content_description = $('#content_description').val();
+		var pages_id = $('input[name="pages_id"]').val();
+		var x = $('input[name="x"]').val();
+		var y = $('input[name="y"]').val();
 		
-		if (typeof content_file !== "undefined") 
-		{
-			// AJAX to server
-            var uri = base_url + "/index.php/contents/add";
-            var xhr = new XMLHttpRequest();
-            var fd = new FormData();
-             
-            xhr.open("POST", uri, true);
-            
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    // Handle response.
-                    alert(xhr.responseText); // handle response.
-                }
-            };
-            
-            fd.append('file', content_file);
-            fd.append('text', content_text);
-            // Initiate a multipart/form-data upload
-            xhr.send(fd);
-        }
+		// AJAX to server
+		var uri = base_url + "index.php/contents/add";
+		var xhr = new XMLHttpRequest();
+		var fd = new FormData();
+		 
+		xhr.open("POST", uri, true);
+		
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				// Handle response.
+				alert(xhr.responseText); // handle response.
+			}
+		};
+		
+		// check to see if a file has been selected 
+		if (typeof content_file !== "undefined") fd.append('file', content_file);
+		
+		fd.append('description', content_description);
+		fd.append('pages_id', pages_id);
+		fd.append('x', x);
+		fd.append('y', y);
+		// Initiate a multipart/form-data upload
+		xhr.send(fd);
         
 	});
 	
