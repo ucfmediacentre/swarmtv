@@ -4,13 +4,6 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/fineuploader.jquery-3.0/jquery.fineuploader-3.0.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js"></script>
 <script src="<?php echo base_url(); ?>js/vendor/jquery.ui.touch-punch.min.js"></script>
-<<<<<<< HEAD
-<script type="text/javascript">
-
-// Save the base url as a javascript variable
-var base_url = "<?php echo base_url(); ?>";
-=======
-
 <script type="text/javascript">
 
 // Save the base url as a javascript variable
@@ -18,7 +11,6 @@ var base_url = "<?php echo base_url(); ?>";
 var initDiagonal;
 var initFontSize = 24;
 var elementProperties = new Object();
->>>>>>> updatingDatabase
 
 $(document).ready(function(){
 	
