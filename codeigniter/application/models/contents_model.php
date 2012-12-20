@@ -4,7 +4,7 @@ class Contents_model extends CI_Model {
 
 	var $file_errors = null;
 	var $data_errors = null;
-	var $file = null;
+	var $file = false;				// is a file present on the server?
 	var $valid_file = false;
 	
 	var $current_mime_type_index = -1;
@@ -97,7 +97,17 @@ class Contents_model extends CI_Model {
 		$this->data['filename'] = $full_name;
 		$this->data['type'] = $folder_from_mime_type;
 		
-		return move_uploaded_file($_FILES['file']['tmp_name'], 'assets/' . $folder_from_mime_type . '/' . $full_name);	
+		$success = move_uploaded_file($_FILES['file']['tmp_name'], 'assets/' . $folder_from_mime_type . '/' . $full_name);	
+		
+		if ($success){
+			$file = true;
+		}else
+		{
+			$this->file_errors = "An error occurred when moving the file on the server!";
+			return false;
+			exit;
+		} 
+		return true;
 	}
 	
 	/*
@@ -133,7 +143,21 @@ class Contents_model extends CI_Model {
 	
 	function add_content_to_database()
 	{
-		$this->db->insert('contents', $this->data); 
+		if (!$this->db->insert('contents', $this->data))
+		{
+			// should probably check to see if a page exist with this id as well?
+			$this->data_errors = "There was an error adding content to the database";
+			//delete file if there was one?
+			// *** IMPORTANT *** 
+			remove_orthan_file();
+			return false;
+			exit;
+		} 
    		return $this->db->insert_id();
+	}
+	
+	private function remove_orthan_file()
+	{
+		
 	}
 }
