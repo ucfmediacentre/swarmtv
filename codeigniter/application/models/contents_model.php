@@ -93,7 +93,7 @@ class Contents_model extends CI_Model {
 		 $uploads_dir = base_url . 'assets/' . $folder_from_mime_type . '/';
 		 $tmp_name = $_FILES['file']['tmp_name'];
          
-         $name = uniqid($folder_from_mime_type . '_')
+         $name = uniqid($folder_from_mime_type . '_');
          move_uploaded_file($tmp_name, "$uploads_dir/$name");	
 	}
 	
