@@ -61,7 +61,6 @@ class Contents_model extends CI_Model {
 		$file_mime_type = $mime_type_parts[0]; 
 		
 		// check mime type against a list of excepted mime types
-		
 		foreach($this->excepted_mime_types as  $index => $type) 
         { 
             if (in_array($file_mime_type, $type))
@@ -78,18 +77,21 @@ class Contents_model extends CI_Model {
 			return false;
 			exit;
 		}
-		
-		return true;
+		return true;			// the file validates
 	}
 	
 	function move_file()
-	{
-		 $folder_from_mime_type = $this->excepted_mime_types[$this->current_mime_type_index][1];
-		 $uploads_dir = base_url . 'assets/' . $folder_from_mime_type . '/';
-		 $tmp_name = $_FILES['file']['tmp_name'];
-         
-         $name = uniqid($folder_from_mime_type . '_');
-        // move_uploaded_file($tmp_name, "$uploads_dir/$name");	
+	{	
+		 // construct the location from the data
+		 $folder_from_mime_type = $this->excepted_mime_types[$this->current_mime_type_index][1];  // image / audio / movie folder
+		 $uploads_dir = base_url() . 'assets/' . $folder_from_mime_type . '/';
+		 
+		 $extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+    	 $unique_name = $folder_from_mime_type . '-' . uniqid();
+    	 
+    	 $full_name = $unique_name . '.' . $extension;
+    	 
+    	 return move_uploaded_file($_FILES['file']['tmp_name'], 'assets/' . $folder_from_mime_type . '/' . $full_name);	
 	}
 	
 	/*

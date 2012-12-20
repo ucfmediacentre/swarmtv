@@ -21,7 +21,7 @@ class Contents extends CI_Controller {
 			$this->Contents_model->move_file() or exit($this->Contents_model->file_errors);
 		}		
 		
-		//$this->Contents_model->validate_data() or exit($this->Contents_model->data_errors);
+		$this->Contents_model->validate_data() or exit($this->Contents_model->data_errors);
 		
 		//$this->Contents_model->add_content_to_database($this->Contents_model->data_errors) or exit();
 		
