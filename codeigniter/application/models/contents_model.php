@@ -141,7 +141,21 @@ class Contents_model extends CI_Model {
 		
 		if (array_key_exists('x', $post_data) && array_key_exists('y', $post_data))
 		{
+			$x = $post_data['x'];
+			$y = $post_data['y'];
+			
+			echo $x . ' ' . $y;
 			// check x and y are integers
+			if (filter_var($x, FILTER_VALIDATE_INT) && filter_var($x, FILTER_VALIDATE_INT))
+			{
+				$this->data['x'] = $x;
+				$this->data['y'] = $y;
+			}else
+			{
+				$this->data_errors = "Position values are incorrect!";
+				return false;
+				exit;
+			}
 		}
 		
 		return true;
