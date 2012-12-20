@@ -54,7 +54,6 @@ class Pages extends CI_Controller {
 	
 	public function updateElement()
 	{
-		echo "pages/updateElement : ";
 		$this->load->model('Contents_model');
 		echo $this->Contents_model->updateElement();
 	}
