@@ -237,8 +237,8 @@ q {
 
 q:before,
 q:after {
-    content: '';
-    content: none;
+    element: '';
+    element: none;
 }
 
 /*
@@ -309,7 +309,7 @@ nav ol {
 }
 
 /* ==========================================================================
-   Embedded content
+   Embedded element
    ========================================================================== */
 
 /*
@@ -433,7 +433,7 @@ input[disabled] {
 }
 
 /*
- * 1. Addresses box sizing set to content-box in IE 8/9.
+ * 1. Addresses box sizing set to element-box in IE 8/9.
  * 2. Removes excess padding in IE 8/9.
  * 3. Removes excess padding in IE 7.
  *    Known issue: excess padding remains in IE 6.
@@ -455,9 +455,9 @@ input[type="radio"] {
 
 input[type="search"] {
     -webkit-appearance: textfield; /* 1 */
-    -moz-box-sizing: content-box;
-    -webkit-box-sizing: content-box; /* 2 */
-    box-sizing: content-box;
+    -moz-box-sizing: element-box;
+    -webkit-box-sizing: element-box; /* 2 */
+    box-sizing: element-box;
 }
 
 /*

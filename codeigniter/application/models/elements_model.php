@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Contents_model extends CI_Model {
+class Elements_model extends CI_Model {
 
 	var $file_errors = null;
 	var $data_errors = null;
@@ -35,9 +35,11 @@ class Contents_model extends CI_Model {
 		$this->load->library('upload', $config);
     }
     
-    function get_all_contents($page_id)
+    function get_all_elements($page_id)
     {
     	$query = $this->db->get_where('contents', array('pages_id' => $page_id));
+    	//$query = $this->db->get_where('elements', array('pages_id' => $page_id));
+		
 		return $query->result();
     }
 
@@ -57,7 +59,7 @@ class Contents_model extends CI_Model {
 		// http://designshack.net/articles/php-articles/smart-file-type-detection-using-php/
 		// Get the file mime type
 		$file_info = new finfo(FILEINFO_MIME);  
-		$mime_type_string = $file_info->buffer(file_get_contents($file['tmp_name']));
+		$mime_type_string = $file_info->buffer(file_get_elements($file['tmp_name']));
 		$mime_type_parts = explode(' ', $mime_type_string);
 		
 		$file_mime_type = $mime_type_parts[0]; 
@@ -84,7 +86,7 @@ class Contents_model extends CI_Model {
 	
 	function move_file()
 	{	 
-		// Consider creating a folder every new month so that content is easier to find? 
+		// Consider creating a folder every new month so that elements are easier to find? 
 		// construct the location from the data
 		$folder_from_mime_type = $this->excepted_mime_types[$this->current_mime_type_index][1];  // image / audio / movie folder
 		$uploads_dir = base_url() . 'assets/' . $folder_from_mime_type . '/';
@@ -111,7 +113,7 @@ class Contents_model extends CI_Model {
 	}
 	
 	/*
-	backgroundColor, color, contents, filename, fontFamily, fontSize, height, width, timeline, 
+	backgroundColor, color, content, filename, fontFamily, fontSize, height, width, timeline, 
 	opacity, attribution, description, keywords, license, pages_id, textAlign, type, x, y, z
 	*/
 	function validate_data()
@@ -134,7 +136,7 @@ class Contents_model extends CI_Model {
 		}else
 		{
 			// should probably check to see if a page exist with this id as well?
-			$this->data_errors = "There was no page assigned to the content!";
+			$this->data_errors = "There was no page assigned to the element!";
 			return false;
 			exit;
 		}
@@ -161,12 +163,14 @@ class Contents_model extends CI_Model {
 		return true;
 	}
 	
-	function add_content_to_database()
+	function add_element_to_database()
 	{
 		if (!$this->db->insert('contents', $this->data))
+		//if (!$this->db->insert('elements', $this->data))
+		
 		{
 			// should probably check to see if a page exist with this id as well?
-			$this->data_errors = "There was an error adding content to the database";
+			$this->data_errors = "There was an error adding element to the database";
 			//delete file if there was one?
 			// *** IMPORTANT *** 
 			if ($file) remove_orthan_file();

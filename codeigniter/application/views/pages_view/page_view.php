@@ -1,19 +1,19 @@
-<div id="content_wrapper">
+<div id="element_wrapper">
 
 <h1> <?php echo $page_info->title; ?> </h1>
 <p> <?php echo $page_info->description; ?> </p>
 
 <?php 
-foreach ($page_contents as $content)
+foreach ($page_elements as $element)
 {
-	$content_style = 'left:' . $content->x . 'px; top:' . $content->y . 'px;';
-	echo '<div class="content_box" style="' . $content_style . '">';
-	switch ($content->type){
+	$element_style = 'left:' . $element->x . 'px; top:' . $element->y . 'px;';
+	echo '<div class="element_box" style="' . $element_style . '">';
+	switch ($element->type){
 		case 'text':		
-			echo htmlspecialchars_decode($content->description);
+			echo htmlspecialchars_decode($element->description);
 			break;
 		case 'image':
-			echo "<img width=\"$content->width\" src=\"" . base_url() . "assets/image/$content->filename\" />";
+			echo "<img width=\"$element->width\" src=\"" . base_url() . "assets/image/$element->filename\" />";
 			break;
 		case 'audio':
 			break;
