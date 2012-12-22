@@ -37,10 +37,41 @@ class Elements_model extends CI_Model {
     
     function get_all_elements($page_id)
     {
-    	$query = $this->db->get_where('contents', array('pages_id' => $page_id));
+    	
+		$elementArray = array();
+		
+		$query = $this->db->get_where('contents', array('pages_id' => $page_id));
     	//$query = $this->db->get_where('elements', array('pages_id' => $page_id));
 		
-		return $query->result();
+		foreach ($query->result() as $element)
+			{
+			//creates an array of each element on the screen
+			$elementArray[] = array( 	'attribution' => $element->attribution ,
+										'backgroundColor' => $element->backgroundColor ,
+										'color' => $element->color ,
+										'contents' => $element->contents ,
+										'description' => $element->description ,
+										'filename' => $element->filename ,
+										'fontFamily' => $element->fontFamily ,
+										'fontSize' => $element->fontSize ,
+										'height' => $element->height ,
+										'id' => $element->id ,
+										'keywords' => $element->keywords ,
+										'license' => $element->license ,
+										'opacity' => $element->opacity ,
+										'pages_id' => $element->pages_id ,
+										'textAlign' => $element->textAlign ,
+										'timeline' => $element->timeline ,
+										'type' => $element->type ,
+										'width' => $element->width ,
+										'x' => $element->x ,
+										'y' => $element->y ,
+										'z' => $element->z 
+			);
+
+		}
+		
+		return $elementArray;
     }
 
 	function validate_file()
