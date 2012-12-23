@@ -38,7 +38,7 @@ class Contents_model extends CI_Model {
     function get_all_contents($page_id)
     {
     	$query = $this->db->get_where('contents', array('pages_id' => $page_id));
-		return $query->result();
+    	return $query->result();
     }
 
 	function validate_file()
