@@ -24,16 +24,16 @@ class Pages extends CI_Controller {
 		
 		if($page_details) 
 		{
-			// get the page contents
-			$this->load->model('Contents_model');
-			$page_contents= $this->Contents_model->get_all_contents($page_details->id);
-			$data['page_contents'] = $page_contents;
+			// get the page elements
+			$this->load->model('Elements_model');
+			$page_elements= $this->Elements_model->get_all_elements($page_details->id);
+			$data['page_elements'] = $page_elements;
 			
 			// load view with data
 			$this->load->view('header');
 			$this->load->view('pages_view/page_info_form', $data);
 			$this->load->view('pages_view/page_view', $data);
-			$this->load->view('pages_view/page_content_form', $data);
+			$this->load->view('pages_view/page_element_form', $data);
 			$this->load->view('pages_view/page_view_scripts');
 			$this->load->view('footer');
 		}else
@@ -56,7 +56,7 @@ class Pages extends CI_Controller {
 	{
 		echo '{"success":true, "name": "' . $_GET['name'] . '"}';
 	}
-	
+
 }
 
 /* End of file pages.php */

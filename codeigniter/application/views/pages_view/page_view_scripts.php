@@ -1,6 +1,9 @@
 
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/fancybox/jquery.fancybox-1.3.4.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>libraries/fineuploader.jquery-3.0/jquery.fineuploader-3.0.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>libraries/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="<?php echo base_url(); ?>js/vendor/jquery.ui.touch-punch.min.js"></script>
 <script type="text/javascript">
 
 // Save the base url as a a javascript variable
@@ -28,32 +31,32 @@ $(document).ready(function(){
 	});
 	
 	// init fancy box
-	$("a#add_content_form_trigger").fancybox({
+	$("a#add_element_form_trigger").fancybox({
 		'overlayOpacity':0,
 		'autoDimensions':true,
 		'showCloseButton':false,
 	});
 	
 	// trigger the fancy box on double click
-	$('#content_wrapper').dblclick(function(e){
-		$("a#add_content_form_trigger").trigger('click');
+	$('#element_wrapper').dblclick(function(e){
+		$("a#add_element_form_trigger").trigger('click');
 		
 		$('input[name="x"]').val(e.pageX);
 		$('input[name="y"]').val(e.pageY);
 	});
 	
-	// Ajax for adding content
-	$('#submit_content').click(function(e){
+	// Ajax for adding element
+	$('#submit_element').click(function(e){
 		e.preventDefault();
 		
-		var content_file = $('#content_file').get(0).files[0];
-		var content_description = $('#content_description').val();
+		var element_file = $('#element_file').get(0).files[0];
+		var element_description = $('#element_description').val();
 		var pages_id = $('input[name="pages_id"]').val();
 		var x = $('input[name="x"]').val();
 		var y = $('input[name="y"]').val();
 		
 		// AJAX to server
-		var uri = base_url + "index.php/contents/add";
+		var uri = base_url + "index.php/elements/add";
 		var xhr = new XMLHttpRequest();
 		var fd = new FormData();
 		 
@@ -67,9 +70,9 @@ $(document).ready(function(){
 		};
 		
 		// check to see if a file has been selected 
-		if (typeof content_file !== "undefined") fd.append('file', content_file);
+		if (typeof element_file !== "undefined") fd.append('file', element_file);
 		
-		fd.append('description', content_description);
+		fd.append('description', element_description);
 		fd.append('pages_id', pages_id);
 		fd.append('x', x);
 		fd.append('y', y);
@@ -79,35 +82,129 @@ $(document).ready(function(){
 	});
 	
 	// update preview is file is selected
-	$('#content_file').change(function(){
+	$('#element_file').change(function(){
 		
 		// check to see if a file has been selected
-		var content_file = $('#content_file').get(0).files[0];
-		if (typeof content_file !== "undefined") 
+		var element_file = $('#element_file').get(0).files[0];
+		if (typeof element_file !== "undefined") 
 		{	
-			$('#content_file_info').empty();
+			$('#element_file_info').empty();
 			
 			var imageType = /image.*/;
      
-    		if (content_file.type.match(imageType)) {
+    		if (element_file.type.match(imageType)) {
 				
 				// create thumbnail
 				var img = document.createElement("img");
 				img.classList.add("thumbnail");
-				img.file = content_file;
+				img.file = element_file;
 				img.width = 100;
-				$('#content_file_info').append(img);
+				$('#element_file_info').append(img);
 				
 				// load in image data 
 				var reader = new FileReader();
 				reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-				reader.readAsDataURL(content_file);
+				reader.readAsDataURL(element_file);
 			}	
 			
-			var info = '<br />Name: ' + content_file.name + "<br /> Size: " + content_file.size + " bytes";
-			$('#content_file_info').append(info); 	
+			var info = '<br />Name: ' + element_file.name + "<br /> Size: " + element_file.size + " bytes";
+			$('#element_file_info').append(info); 	
 		}
 	});
+	
+	//iterate through divs on the page and instantiate them
+	$('.element').each(function() {
+		// put all your jQuery goodness in here.
+		switch ($(this).attr('type')){
+    		case "text":
+    			//ask for div id
+    			var $id = $(this).attr('id');
+    			for (var i=0;i<page_elements.length;i++)
+				{
+					if(page_elements[i].id == $id){
+						injectTextElements(i,$id);
+					}
+				}
+    			break;
+    		case "image":
+    			var $id = $(this).attr('id');
+    			for (var i=0;i<page_elements.length;i++)
+				{
+					if(page_elements[i].id == $id){
+						injectImageElements(i,$id);
+					}
+				}
+    			break;
+			case "audio":
+				break;
+			case "movie":
+				break;
+    	}
+ 	}); 
 });
+
+var page_elements = $.parseJSON('<?php echo json_encode($page_elements); ?>');
+
+function injectTextElements(pageElementsArray, elementId){
+	$('#'+elementId).css('backgroundColor', page_elements[pageElementsArray].backgroundColor);
+	$('#'+elementId).css('color', page_elements[pageElementsArray].color);
+	$('#'+elementId).text(page_elements[pageElementsArray].contents);
+	$('#'+elementId).css('font-family', page_elements[pageElementsArray].fontFamily);
+	$('#'+elementId).css('font-size', page_elements[pageElementsArray].fontSize+'px');
+	$('#'+elementId).css('height', page_elements[pageElementsArray].height+'px');
+	$('#'+elementId).attr('license', page_elements[pageElementsArray].license);
+	$('#'+elementId).css('opacity', page_elements[pageElementsArray].opacity);
+	$('#'+elementId).css('position', 'absolute');
+	$('#'+elementId).attr('pages_id', page_elements[pageElementsArray].pages_id);
+	$('#'+elementId).css('text-align', page_elements[pageElementsArray].textAlign);
+	$('#'+elementId).css('width', page_elements[pageElementsArray].width+'px');
+	$('#'+elementId).css('left', page_elements[pageElementsArray].x+'px');
+	$('#'+elementId).css('top', page_elements[pageElementsArray].y+'px');
+	$('#'+elementId).css('z-index', page_elements[pageElementsArray].z);
+}
+
+function injectImageElements(pageElementsArray, elementId){
+	$('#'+elementId).html('<img src="'+base_url+'assets/image/'+page_elements[pageElementsArray].filename+'" />');
+	$('#'+elementId).attr('attribution', page_elements[pageElementsArray].attribution);
+	$('#'+elementId).children().attr('alt', page_elements[pageElementsArray].description);
+	$('#'+elementId).css('height', page_elements[pageElementsArray].height+'px');
+	$('#'+elementId).children().attr('height', page_elements[pageElementsArray].height+'px');
+	$('#'+elementId).attr('keywords', page_elements[pageElementsArray].keywords);
+	$('#'+elementId).attr('license', page_elements[pageElementsArray].license);
+	$('#'+elementId).css('opacity', page_elements[pageElementsArray].opacity);
+	$('#'+elementId).css('position', 'absolute');
+	$('#'+elementId).attr('pages_id', page_elements[pageElementsArray].pages_id);
+	$('#'+elementId).css('width', page_elements[pageElementsArray].width+'px');
+	$('#'+elementId).children().attr('width', page_elements[pageElementsArray].width+'px');
+	$('#'+elementId).css('left', page_elements[pageElementsArray].x+'px');
+	$('#'+elementId).css('top', page_elements[pageElementsArray].y+'px');
+	$('#'+elementId).css('z-index', page_elements[pageElementsArray].z);
+}
+						
+/*function injectElementsProperties(pageElementsArray, elementId){
+	$('#'+elementId).attr('attribution', page_elements[pageElementsArray].attribution);
+	$('#'+elementId).css('backgroundColor', page_elements[pageElementsArray].backgroundColor);
+	$('#'+elementId).css('color', page_elements[pageElementsArray].color);
+	$('#'+elementId).text(page_elements[pageElementsArray].contents);
+	$('#'+elementId).attr('description', page_elements[pageElementsArray].description);
+	$('#'+elementId).attr('filename', page_elements[pageElementsArray].filename);
+	$('#'+elementId).css('font-family', page_elements[pageElementsArray].fontFamily);
+	$('#'+elementId).css('font-size', page_elements[pageElementsArray].fontSize+'px');
+	$('#'+elementId).css('height', page_elements[pageElementsArray].height+'px');
+	$('#'+elementId).attr('id', page_elements[pageElementsArray].id);
+	$('#'+elementId).attr('keywords', page_elements[pageElementsArray].keywords);
+	$('#'+elementId).attr('license', page_elements[pageElementsArray].license);
+	$('#'+elementId).css('opacity', page_elements[pageElementsArray].opacity);
+	$('#'+elementId).css('position', 'absolute');
+	$('#'+elementId).attr('pages_id', page_elements[pageElementsArray].pages_id);
+	$('#'+elementId).css('text-align', page_elements[pageElementsArray].textAlign);
+	$('#'+elementId).attr('timeline', page_elements[pageElementsArray].timeline);
+	$('#'+elementId).attr('type', page_elements[pageElementsArray].type);
+	$('#'+elementId).css('width', page_elements[pageElementsArray].width+'px');
+	$('#'+elementId).css('left', page_elements[pageElementsArray].x+'px');
+	$('#'+elementId).css('top', page_elements[pageElementsArray].y+'px');
+	$('#'+elementId).css('z-index', page_elements[pageElementsArray].z);
+}*/
+	
 
 </script>
