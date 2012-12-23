@@ -111,6 +111,100 @@ $(document).ready(function(){
 			$('#element_file_info').append(info); 	
 		}
 	});
+	
+	//iterate through divs on the page and instantiate them
+	$('.element').each(function() {
+		// put all your jQuery goodness in here.
+		switch ($(this).attr('type')){
+    		case "text":
+    			//ask for div id
+    			var $id = $(this).attr('id');
+    			for (var i=0;i<page_elements.length;i++)
+				{
+					if(page_elements[i].id == $id){
+						injectTextElements(i,$id);
+					}
+				}
+    			break;
+    		case "image":
+    			var $id = $(this).attr('id');
+    			for (var i=0;i<page_elements.length;i++)
+				{
+					if(page_elements[i].id == $id){
+						injectImageElements(i,$id);
+					}
+				}
+    			break;
+			case "audio":
+				break;
+			case "movie":
+				break;
+    	}
+ 	}); 
 });
+
+var page_elements = $.parseJSON('<?php echo json_encode($page_elements); ?>');
+
+function injectTextElements(pageElementsArray, elementId){
+	$('#'+elementId).css('backgroundColor', page_elements[pageElementsArray].backgroundColor);
+	$('#'+elementId).css('color', page_elements[pageElementsArray].color);
+	$('#'+elementId).text(page_elements[pageElementsArray].contents);
+	$('#'+elementId).css('font-family', page_elements[pageElementsArray].fontFamily);
+	$('#'+elementId).css('font-size', page_elements[pageElementsArray].fontSize+'px');
+	$('#'+elementId).css('height', page_elements[pageElementsArray].height+'px');
+	$('#'+elementId).attr('license', page_elements[pageElementsArray].license);
+	$('#'+elementId).css('opacity', page_elements[pageElementsArray].opacity);
+	$('#'+elementId).css('position', 'absolute');
+	$('#'+elementId).attr('pages_id', page_elements[pageElementsArray].pages_id);
+	$('#'+elementId).css('text-align', page_elements[pageElementsArray].textAlign);
+	$('#'+elementId).css('width', page_elements[pageElementsArray].width+'px');
+	$('#'+elementId).css('left', page_elements[pageElementsArray].x+'px');
+	$('#'+elementId).css('top', page_elements[pageElementsArray].y+'px');
+	$('#'+elementId).css('z-index', page_elements[pageElementsArray].z);
+}
+
+function injectImageElements(pageElementsArray, elementId){
+	$('#'+elementId).html('<img src="'+base_url+'assets/image/'+page_elements[pageElementsArray].filename+'" />');
+	$('#'+elementId).attr('attribution', page_elements[pageElementsArray].attribution);
+	$('#'+elementId).children().attr('alt', page_elements[pageElementsArray].description);
+	$('#'+elementId).css('height', page_elements[pageElementsArray].height+'px');
+	$('#'+elementId).children().attr('height', page_elements[pageElementsArray].height+'px');
+	$('#'+elementId).attr('keywords', page_elements[pageElementsArray].keywords);
+	$('#'+elementId).attr('license', page_elements[pageElementsArray].license);
+	$('#'+elementId).css('opacity', page_elements[pageElementsArray].opacity);
+	$('#'+elementId).css('position', 'absolute');
+	$('#'+elementId).attr('pages_id', page_elements[pageElementsArray].pages_id);
+	$('#'+elementId).css('width', page_elements[pageElementsArray].width+'px');
+	$('#'+elementId).children().attr('width', page_elements[pageElementsArray].width+'px');
+	$('#'+elementId).css('left', page_elements[pageElementsArray].x+'px');
+	$('#'+elementId).css('top', page_elements[pageElementsArray].y+'px');
+	$('#'+elementId).css('z-index', page_elements[pageElementsArray].z);
+}
+						
+/*function injectElementsProperties(pageElementsArray, elementId){
+	$('#'+elementId).attr('attribution', page_elements[pageElementsArray].attribution);
+	$('#'+elementId).css('backgroundColor', page_elements[pageElementsArray].backgroundColor);
+	$('#'+elementId).css('color', page_elements[pageElementsArray].color);
+	$('#'+elementId).text(page_elements[pageElementsArray].contents);
+	$('#'+elementId).attr('description', page_elements[pageElementsArray].description);
+	$('#'+elementId).attr('filename', page_elements[pageElementsArray].filename);
+	$('#'+elementId).css('font-family', page_elements[pageElementsArray].fontFamily);
+	$('#'+elementId).css('font-size', page_elements[pageElementsArray].fontSize+'px');
+	$('#'+elementId).css('height', page_elements[pageElementsArray].height+'px');
+	$('#'+elementId).attr('id', page_elements[pageElementsArray].id);
+	$('#'+elementId).attr('keywords', page_elements[pageElementsArray].keywords);
+	$('#'+elementId).attr('license', page_elements[pageElementsArray].license);
+	$('#'+elementId).css('opacity', page_elements[pageElementsArray].opacity);
+	$('#'+elementId).css('position', 'absolute');
+	$('#'+elementId).attr('pages_id', page_elements[pageElementsArray].pages_id);
+	$('#'+elementId).css('text-align', page_elements[pageElementsArray].textAlign);
+	$('#'+elementId).attr('timeline', page_elements[pageElementsArray].timeline);
+	$('#'+elementId).attr('type', page_elements[pageElementsArray].type);
+	$('#'+elementId).css('width', page_elements[pageElementsArray].width+'px');
+	$('#'+elementId).css('left', page_elements[pageElementsArray].x+'px');
+	$('#'+elementId).css('top', page_elements[pageElementsArray].y+'px');
+	$('#'+elementId).css('z-index', page_elements[pageElementsArray].z);
+}*/
+	
 
 </script>

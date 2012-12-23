@@ -3,24 +3,11 @@
 
 <?php
 
-foreach ($page_elements->result() as $element)
-	{
-
-	echo '<div id="' . $element->id . '" class="element" class="' . $element->type . '" /></div>';
-	/*switch ($element->type){
-		case 'text':		
-			echo htmlspecialchars_decode($element->description);
-			break;
-		case 'image':
-			echo "<img width=\"$element->width\" src=\"" . base_url() . "assets/image/$element->filename\" />";
-			break;
-		case 'audio':
-			break;
-		case 'movie':
-			break;
-	}
-	echo '</div>';*/
+foreach ($page_elements as $element)
+{
+	echo '<div id="' . $element['id'] . '" class="element" type="' . $element['type'] . '" /></div>';
 }
+
 ?>
 
 

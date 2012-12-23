@@ -1,4 +1,4 @@
-<div id="page_info_form_wrap">
+<div id="page_info_form_wrap" class="hidden" >
 
 	<form action="#" method="get" enctype="multipart/form-data">
 		

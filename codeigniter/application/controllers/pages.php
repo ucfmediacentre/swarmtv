@@ -56,7 +56,7 @@ class Pages extends CI_Controller {
 	{
 		echo '{"success":true, "name": "' . $_GET['name'] . '"}';
 	}
-	
+
 }
 
 /* End of file pages.php */
