@@ -5,7 +5,7 @@
 
 foreach ($page_elements as $element)
 {
-	echo '<div id="' . $element['id'] . '" class="element" type="' . $element['type'] . '" /></div>';
+	echo '<div id="' . $element['id'] . '" class="element" type="' . $element['type'] . '" />OOOO</div>';
 }
 
 ?>

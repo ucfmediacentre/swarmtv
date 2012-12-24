@@ -184,5 +184,12 @@ class Elements_model extends CI_Model {
 		unlink('assets/' . $this->type . '/' . $filename);	
 	}
 	
-	
+	public function updateElement()
+   {
+   		$data = get_object_vars(json_decode($_POST['elementData']));
+
+		$this->db->where('id', $data["id"]);
+		$this->db->update('contents', $data); 
+		return $this->db->affected_rows();
+   }
 }
