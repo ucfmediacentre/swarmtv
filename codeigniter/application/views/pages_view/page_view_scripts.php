@@ -128,7 +128,10 @@ $(document).ready(function(){
 					stop: function(event, ui) {
 						updateElementProperties($(this).attr('id'));
 					}
-				}).resizable({
+				});
+				
+				//make each text element resizable and linked to the database
+				$(this).resizable({
 					stop: function(event, ui) {
 						updateElementProperties($(this).attr('id'));
 					}
@@ -142,6 +145,22 @@ $(document).ready(function(){
 						injectImageElements(i,$id);
 					}
 				}
+				
+				//make each image element draggable and linked to the database
+				$(this).draggable({
+					stop: function(event, ui) {
+						updateElementProperties($(this).attr('id'));
+					}
+				});
+				
+				//make each image element resizable and linked to the database
+				$(this).resizable({
+					alsoResize: $(this).children(),
+					stop: function(event, ui) {
+						updateElementProperties($(this).attr('id'));
+					}
+				});
+				
     			break;
 			case "audio":
 				break;
@@ -249,6 +268,33 @@ function updateElementProperties(elementId){
 			page_elements[$pageElementsArray].y = $('#'+elementId).css('top');
 			page_elements[$pageElementsArray].z = $('#'+elementId).css('z-index');
 			break;
+		case "image":
+			page_elements[$pageElementsArray].attribution = $('#'+elementId).attr('attribution');
+			page_elements[$pageElementsArray].backgroundColor = "";
+			page_elements[$pageElementsArray].color = "";
+			page_elements[$pageElementsArray].contents = "";
+			page_elements[$pageElementsArray].description = $('#'+elementId).children().attr('alt');
+			$url = $('#'+elementId).children().attr('src');
+			$positionOfSlash = $url.lastIndexOf("/");
+			$urlLength = $url.length;
+			$filename = $url.slice($positionOfSlash+1,$urlLength); 
+			page_elements[$pageElementsArray].filename = $filename;			
+			page_elements[$pageElementsArray].fontFamily = "";
+			page_elements[$pageElementsArray].fontSize = "";
+			page_elements[$pageElementsArray].height = $('#'+elementId).css('height');
+			page_elements[$pageElementsArray].id = elementId;
+			page_elements[$pageElementsArray].keywords = $('#'+elementId).attr('keywords');
+			page_elements[$pageElementsArray].license = $('#'+elementId).attr('license');
+			page_elements[$pageElementsArray].opacity = $('#'+elementId).css('opacity');
+			page_elements[$pageElementsArray].pages_id = $('#'+elementId).attr('pages_id');
+			page_elements[$pageElementsArray].textAlign = $('#'+elementId).css('text-align');
+			page_elements[$pageElementsArray].timeline = "";
+			page_elements[$pageElementsArray].type = $('#'+elementId).attr('type');
+			page_elements[$pageElementsArray].width = $('#'+elementId).css('width');
+			page_elements[$pageElementsArray].x = $('#'+elementId).css('left');
+			page_elements[$pageElementsArray].y = $('#'+elementId).css('top');
+			page_elements[$pageElementsArray].z = $('#'+elementId).css('z-index');
+			break;
 	}
 	// Ajax the values to the pages controller 
 	//alert('elementData=' + JSON.stringify(page_elements[$pageElementsArray])); 
@@ -261,6 +307,5 @@ function updateElementProperties(elementId){
 			//alert("Returned data = "+data);
 		}
 	});
-}
 
 </script>
