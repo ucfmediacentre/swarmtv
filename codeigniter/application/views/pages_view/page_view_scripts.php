@@ -307,5 +307,6 @@ function updateElementProperties(elementId){
 			//alert("Returned data = "+data);
 		}
 	});
+}
 
 </script>
