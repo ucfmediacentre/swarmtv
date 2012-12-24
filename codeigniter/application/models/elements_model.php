@@ -37,7 +37,7 @@ class Elements_model extends CI_Model {
     
     function get_all_elements($page_id)
     {
-    	$query = $this->db->get_where('contents', array('pages_id' => $page_id));
+    	$query = $this->db->get_where('elements', array('pages_id' => $page_id));
     	return $query->result_array();
     }
 
@@ -163,8 +163,7 @@ class Elements_model extends CI_Model {
 	
 	function add_element_to_database()
 	{
-		if (!$this->db->insert('contents', $this->data))
-		//if (!$this->db->insert('elements', $this->data))
+		if (!$this->db->insert('elements', $this->data))
 		
 		{
 			// should probably check to see if a page exist with this id as well?
@@ -189,7 +188,7 @@ class Elements_model extends CI_Model {
    		$data = get_object_vars(json_decode($_POST['elementData']));
 
 		$this->db->where('id', $data["id"]);
-		$this->db->update('contents', $data); 
+		$this->db->update('elements', $data); 
 		return $this->db->affected_rows();
    }
 }
