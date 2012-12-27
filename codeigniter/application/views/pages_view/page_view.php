@@ -9,6 +9,3 @@ foreach ($page_elements as $element)
 }
 
 ?>
-
-
-

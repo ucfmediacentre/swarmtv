@@ -6,6 +6,8 @@
 
 // Save the base url as a a javascript variable
 var base_url = "<?php echo base_url(); ?>";
+var initDiagonal;
+var initFontSize;
 
 $(document).ready(function(){
 	
@@ -117,6 +119,7 @@ $(document).ready(function(){
     		case "text":
     			//ask for div id
     			var $id = $(this).attr('id');
+    			//var initFontSize = $(this).css("font-size");
     			for (var i=0;i<page_elements.length;i++)
 				{
 					if(page_elements[i].id == $id){
@@ -132,10 +135,26 @@ $(document).ready(function(){
 				
 				//make each text element resizable and linked to the database
 				$(this).resizable({
+					create: function(event, ui) {
+						initDiagonal = getContentDiagonal($(this).attr('id'));
+						initFontSize = parseInt($(this).css("font-size"));
+					},
+					resize: function(e, ui) {
+						var newDiagonal = getContentDiagonal($(this).attr('id'));
+						var ratio = newDiagonal / initDiagonal;
+						$(this).css({"font-size" : initFontSize*ratio});
+					},
 					stop: function(event, ui) {
 						updateElementProperties($(this).attr('id'));
 					}
 				});
+				
+				
+				//var newDiagonal = getContentDiagonal(this);
+				//var ratio = newDiagonal / initDiagonal;
+				//$(this).css("font-size", initFontSize + ratio * 3);
+
+				
     			break;
     		case "image":
     			var $id = $(this).attr('id');
@@ -156,6 +175,7 @@ $(document).ready(function(){
 				//make each image element resizable and linked to the database
 				$(this).resizable({
 					alsoResize: $(this).children(),
+					
 					stop: function(event, ui) {
 						updateElementProperties($(this).attr('id'));
 					}
@@ -307,6 +327,12 @@ function updateElementProperties(elementId){
 			//alert("Returned data = "+data);
 		}
 	});
+}
+
+function getContentDiagonal(elementId) {
+    var contentWidth = $("#"+elementId).width()-10;
+    var contentHeight = $("#"+elementId).height()-10;
+    return Math.sqrt((contentWidth * contentWidth) + (contentHeight * contentHeight));
 }
 
 </script>
