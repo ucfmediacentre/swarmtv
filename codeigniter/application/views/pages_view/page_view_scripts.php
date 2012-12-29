@@ -40,7 +40,6 @@ $(document).ready(function(){
 	// trigger the fancy box on double click
 	$('body').dblclick(function(e){
 	
-		console.log("boom");
 		$("a#add_element_form_trigger").trigger('click');
 		
 		$('input[name="x"]').val(e.pageX);
@@ -51,7 +50,8 @@ $(document).ready(function(){
 	$('#submit_element').click(function(e){
 		e.preventDefault();
 		
-		var element_file = $('#element_file').get(0).files[0];
+		// collect the values from the form
+		var element_file = $('#element_file').get(0).files[0];	// this could be null
 		var element_description = $('#element_description').val();
 		var pages_id = $('input[name="pages_id"]').val();
 		var x = $('input[name="x"]').val();

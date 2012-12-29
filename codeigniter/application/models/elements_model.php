@@ -57,7 +57,7 @@ class Elements_model extends CI_Model {
 		// http://designshack.net/articles/php-articles/smart-file-type-detection-using-php/
 		// Get the file mime type
 		$file_info = new finfo(FILEINFO_MIME);  
-		$mime_type_string = $file_info->buffer(file_get_elements($file['tmp_name']));
+		$mime_type_string = $file_info->buffer(file_get_contents($file['tmp_name'])); // *** IMPORTANT -- file_get_contents is a reserved function and should not be changes
 		$mime_type_parts = explode(' ', $mime_type_string);
 		
 		$file_mime_type = $mime_type_parts[0]; 
