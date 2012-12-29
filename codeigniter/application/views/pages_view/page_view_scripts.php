@@ -38,7 +38,9 @@ $(document).ready(function(){
 	});
 	
 	// trigger the fancy box on double click
-	$('#element_wrapper').dblclick(function(e){
+	$('body').dblclick(function(e){
+	
+		console.log("boom");
 		$("a#add_element_form_trigger").trigger('click');
 		
 		$('input[name="x"]').val(e.pageX);
