@@ -13,7 +13,9 @@ class Elements_model extends CI_Model {
 										array('image/png;'	, 'image'),
 										array('image/gif;'	, 'image'),
 										array('image/jpg;'	, 'image'),
-										array('image/gif;'	, 'image')
+										array('image/gif;'	, 'image'),
+										array('audio/mpeg;'	, 'audio'),
+										array('video/mp4;' , 'video')
 										);
 										
 	var $data = array();
@@ -57,7 +59,7 @@ class Elements_model extends CI_Model {
 		// http://designshack.net/articles/php-articles/smart-file-type-detection-using-php/
 		// Get the file mime type
 		$file_info = new finfo(FILEINFO_MIME);  
-		$mime_type_string = $file_info->buffer(file_get_elements($file['tmp_name']));
+		$mime_type_string = $file_info->buffer(file_get_contents($file['tmp_name']));
 		$mime_type_parts = explode(' ', $mime_type_string);
 		
 		$file_mime_type = $mime_type_parts[0]; 
@@ -75,7 +77,7 @@ class Elements_model extends CI_Model {
 		// send error if the file does not validate
 		if ($this->current_mime_type_index < 0) 
 		{
-			$this->file_errors = "The file type is not allowed!";
+			$this->file_errors = "The file type is not allowed! :" . $file_mime_type;
 			return false;
 			exit;
 		}

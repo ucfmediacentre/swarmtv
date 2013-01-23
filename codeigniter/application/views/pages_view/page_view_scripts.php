@@ -11,6 +11,8 @@ var initFontSize;
 
 $(document).ready(function(){
 	
+	initElements();
+	
 	// Ajax submit for updating page info 
 	$('#page_info_submit').click(function(e){
 		// Stop the page from navigating away from this page
@@ -38,7 +40,7 @@ $(document).ready(function(){
 	});
 	
 	// trigger the fancy box on double click
-	$('body').dblclick(function(e){
+	$('#background').dblclick(function(e){
 	
 		console.log("boom");
 		$("a#add_element_form_trigger").trigger('click');
@@ -114,6 +116,8 @@ $(document).ready(function(){
 		}
 	});
 	
+	
+	// ------------------------------------------------------------------------- ELEMENTS LOOP
 	//iterate through divs on the page and instantiate them
 	$('.element').each(function() {
 		//sort out which function needs to fill the elements
@@ -192,68 +196,117 @@ $(document).ready(function(){
  	}); 
 });
 
-var page_elements = $.parseJSON('<?php echo json_encode($page_elements); ?>');
+// output the elements as a json array
+var page_elements_json = <?php echo json_encode($page_elements); ?>;
+var page_elements = new Array();
 
-function injectTextElements(pageElementsArray, elementId){
-	$('#'+elementId).css('backgroundColor', page_elements[pageElementsArray].backgroundColor);
-	$('#'+elementId).css('color', page_elements[pageElementsArray].color);
-	$('#'+elementId).text(page_elements[pageElementsArray].contents);
-	$('#'+elementId).css('font-family', page_elements[pageElementsArray].fontFamily);
-	$('#'+elementId).css('font-size', page_elements[pageElementsArray].fontSize+'px');
-	$('#'+elementId).css('height', page_elements[pageElementsArray].height+'px');
-	$('#'+elementId).attr('license', page_elements[pageElementsArray].license);
-	$('#'+elementId).css('opacity', page_elements[pageElementsArray].opacity);
-	$('#'+elementId).css('position', 'absolute');
-	$('#'+elementId).attr('pages_id', page_elements[pageElementsArray].pages_id);
-	$('#'+elementId).css('text-align', page_elements[pageElementsArray].textAlign);
-	$('#'+elementId).css('width', page_elements[pageElementsArray].width+'px');
-	$('#'+elementId).css('left', page_elements[pageElementsArray].x+'px');
-	$('#'+elementId).css('top', page_elements[pageElementsArray].y+'px');
-	$('#'+elementId).css('z-index', page_elements[pageElementsArray].z);
+function initElements()
+{
+	for (var i = 0; i < page_elements_json.length; i++)
+	{
+		var style = { 
+						'background-color'	:		page_elements_json[i].backgroundColor,
+						'color'				:		page_elements_json[i].color,				
+						'font-family'		: 		page_elements_json[i].fontFamily,
+						'height'			:		page_elements_json[i].height+'px',
+						'opacity'			:		page_elements_json[i].opacity,
+						'text-align'		:		page_elements_json[i].textAlign,
+						'width'				:		page_elements_json[i].width+'px',
+						'left'				:		page_elements_json[i].x+'px',
+						'top'				:		page_elements_json[i].y+'px',
+						'z-index'  			:		page_elements_json[i].z
+					}
+
+		var elm = $('<div>');
+		
+		$(elm).attr('id', page_elements_json[i].id);
+		
+		$(elm).data('page_id', page_elements_json[i].pages_id);
+		$(elm).data('license', page_elements_json[i].license);
+		
+		$(elm).css(style);
+		$(elm).addClass('element');
+		
+		switch (page_elements_json[i].type)
+		{
+			case 'text':
+				initText(elm, i);
+				break;
+			case 'image':
+				initImage(elm, i);
+				break;
+			case 'audio':
+				initAudio(elm, i);
+				break;
+			case 'video':
+				initVideo(elm, i);
+				break;
+		}
+		
+		// MAKE DRAGGABLE
+		$(elm).draggable({
+			stop: function(event, ui) {
+				updateElementProperties($(this).attr('id'));
+			}
+		});
+		
+		// if the file type is not audio then add resize 
+		if (page_elements_json[i].type !== 'audio')
+		{
+			$(elm).resizable({
+				create: function(event, ui) {
+					initDiagonal = getContentDiagonal($(this).attr('id'));
+					initFontSize = parseInt($(this).css("font-size"));
+				},
+				resize: function(e, ui) {
+					var newDiagonal = getContentDiagonal($(this).attr('id'));
+					var ratio = newDiagonal / initDiagonal;
+					$(this).css({"font-size" : initFontSize*ratio});
+				},
+				stop: function(event, ui) {
+					//updateElementProperties($(this).attr('id'));
+				}
+			});
+		}		
+		
+		page_elements.push(elm);
+	}
+	
+	$('body').append(page_elements);
 }
 
-function injectImageElements(pageElementsArray, elementId){
-	$('#'+elementId).html('<img src="'+base_url+'assets/image/'+page_elements[pageElementsArray].filename+'" />');
-	$('#'+elementId).attr('attribution', page_elements[pageElementsArray].attribution);
-	$('#'+elementId).children().attr('alt', page_elements[pageElementsArray].description);
-	$('#'+elementId).css('height', page_elements[pageElementsArray].height+'px');
-	$('#'+elementId).children().attr('height', page_elements[pageElementsArray].height+'px');
-	$('#'+elementId).attr('keywords', page_elements[pageElementsArray].keywords);
-	$('#'+elementId).attr('license', page_elements[pageElementsArray].license);
-	$('#'+elementId).css('opacity', page_elements[pageElementsArray].opacity);
-	$('#'+elementId).css('position', 'absolute');
-	$('#'+elementId).attr('pages_id', page_elements[pageElementsArray].pages_id);
-	$('#'+elementId).css('width', page_elements[pageElementsArray].width+'px');
-	$('#'+elementId).children().attr('width', page_elements[pageElementsArray].width+'px');
-	$('#'+elementId).css('left', page_elements[pageElementsArray].x+'px');
-	$('#'+elementId).css('top', page_elements[pageElementsArray].y+'px');
-	$('#'+elementId).css('z-index', page_elements[pageElementsArray].z);
+function getContentDiagonal(elementId) {
+	console.log("diagonal");
+    var contentWidth = $("#"+elementId).width()-10;
+    var contentHeight = $("#"+elementId).height()-10;
+    return Math.sqrt((contentWidth * contentWidth) + (contentHeight * contentHeight));
 }
-						
-/*function injectElementsProperties(pageElementsArray, elementId){
-	$('#'+elementId).attr('attribution', page_elements[pageElementsArray].attribution);
-	$('#'+elementId).css('backgroundColor', page_elements[pageElementsArray].backgroundColor);
-	$('#'+elementId).css('color', page_elements[pageElementsArray].color);
-	$('#'+elementId).text(page_elements[pageElementsArray].contents);
-	$('#'+elementId).attr('description', page_elements[pageElementsArray].description);
-	$('#'+elementId).attr('filename', page_elements[pageElementsArray].filename);
-	$('#'+elementId).css('font-family', page_elements[pageElementsArray].fontFamily);
-	$('#'+elementId).css('font-size', page_elements[pageElementsArray].fontSize+'px');
-	$('#'+elementId).css('height', page_elements[pageElementsArray].height+'px');
-	$('#'+elementId).attr('id', page_elements[pageElementsArray].id);
-	$('#'+elementId).attr('keywords', page_elements[pageElementsArray].keywords);
-	$('#'+elementId).attr('license', page_elements[pageElementsArray].license);
-	$('#'+elementId).css('opacity', page_elements[pageElementsArray].opacity);
-	$('#'+elementId).css('position', 'absolute');
-	$('#'+elementId).attr('pages_id', page_elements[pageElementsArray].pages_id);
-	$('#'+elementId).css('text-align', page_elements[pageElementsArray].textAlign);
-	$('#'+elementId).attr('timeline', page_elements[pageElementsArray].timeline);
-	$('#'+elementId).attr('type', page_elements[pageElementsArray].type);
-	$('#'+elementId).css('width', page_elements[pageElementsArray].width+'px');
-	$('#'+elementId).css('left', page_elements[pageElementsArray].x+'px');
-	$('#'+elementId).css('top', page_elements[pageElementsArray].y+'px');
-	$('#'+elementId).css('z-index', page_elements[pageElementsArray].z);
-}*/
+
+
+// ----------------------------------------------- TEXT
+function initText(elm, index)
+{
+	$(elm).html( unescape(page_elements_json[index].contents)); 
+}
+
+// ----------------------------------------------- IMAGE
+function initImage(elm, index)
+{
+	$(elm).html('<img width="100%" height="100%" src="' + base_url + 'assets/image/' + page_elements_json[index].filename + '" />');
+}
+
+// ----------------------------------------------- AUDIO
+function initAudio(elm, index)
+{
+	var audio_element = $('<audio controls><source src="' + base_url + 'assets/audio/' + page_elements_json[index].filename + '" type="audio/mpeg"></audio>');
+	$(elm).append(audio_element);
+}
+// ----------------------------------------------- MOVIE
+function initVideo(elm, index)
+{
+	var video_element = $('<video width="100%" height="100%" controls><source src="' + base_url + 'assets/video/' + page_elements_json[index].filename + '" type="video/mp4"></video>');
+	$(elm).append(video_element);
+}
 
 
 function updateElementProperties(elementId){
@@ -318,6 +371,7 @@ function updateElementProperties(elementId){
 			page_elements[$pageElementsArray].z = $('#'+elementId).css('z-index');
 			break;
 	}
+	
 	// Ajax the values to the pages controller 
 	//alert('elementData=' + JSON.stringify(page_elements[$pageElementsArray])); 
 	$.ajax({
@@ -331,10 +385,5 @@ function updateElementProperties(elementId){
 	});
 }
 
-function getContentDiagonal(elementId) {
-    var contentWidth = $("#"+elementId).width()-10;
-    var contentHeight = $("#"+elementId).height()-10;
-    return Math.sqrt((contentWidth * contentWidth) + (contentHeight * contentHeight));
-}
 
 </script>
