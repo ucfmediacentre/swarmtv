@@ -250,6 +250,7 @@ function initElements()
 			}
 		});
 		
+		// *** GLOBAL VARIABLES CAUSING HAVOC WITH THIS FUNCTION
 		// if the file type is not audio then add resize 
 		if (page_elements_json[i].type !== 'audio')
 		{
@@ -260,6 +261,7 @@ function initElements()
 				},
 				resize: function(e, ui) {
 					var newDiagonal = getContentDiagonal($(this).attr('id'));
+					console.log(newDiagonal);
 					var ratio = newDiagonal / initDiagonal;
 					$(this).css({"font-size" : initFontSize*ratio});
 				},
