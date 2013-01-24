@@ -177,7 +177,7 @@ function initElements()
 		// MAKE DRAGGABLE
 		$(elm).draggable({
 			stop: function(event, ui) {
-				updateElementProperties($(this).attr('id'));
+				updateElement();
 			}
 		});
 		
@@ -199,7 +199,7 @@ function initElements()
 					$(this).css({"font-size" : initFontSize*ratio});
 				},
 				stop: function(event, ui) {
-					console.log
+					updateElement($(ui.element).attr('id'));
 				}
 			});
 		}		
@@ -247,7 +247,7 @@ function initVideo(elm, index)
 
 
 function updateElement(elementId){
-  	
+  	console.log("boom");
 }
 
 
