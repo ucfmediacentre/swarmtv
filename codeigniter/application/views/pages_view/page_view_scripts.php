@@ -117,83 +117,7 @@ $(document).ready(function(){
 	});
 	
 	
-	// ------------------------------------------------------------------------- ELEMENTS LOOP
-	//iterate through divs on the page and instantiate them
-	$('.element').each(function() {
-		//sort out which function needs to fill the elements
-		switch ($(this).attr('type')){
-    		case "text":
-    			//ask for div id
-    			var $id = $(this).attr('id');
-    			//var initFontSize = $(this).css("font-size");
-    			for (var i=0;i<page_elements.length;i++)
-				{
-					if(page_elements[i].id == $id){
-						injectTextElements(i,$id);
-					}
-				}
-				//make each text element draggable and linked to the database
-				$(this).draggable({
-					stop: function(event, ui) {
-						updateElementProperties($(this).attr('id'));
-					}
-				});
-				
-				//make each text element resizable and linked to the database
-				$(this).resizable({
-					create: function(event, ui) {
-						initDiagonal = getContentDiagonal($(this).attr('id'));
-						initFontSize = parseInt($(this).css("font-size"));
-					},
-					resize: function(e, ui) {
-						var newDiagonal = getContentDiagonal($(this).attr('id'));
-						var ratio = newDiagonal / initDiagonal;
-						$(this).css({"font-size" : initFontSize*ratio});
-					},
-					stop: function(event, ui) {
-						updateElementProperties($(this).attr('id'));
-					}
-				});
-				
-				
-				//var newDiagonal = getContentDiagonal(this);
-				//var ratio = newDiagonal / initDiagonal;
-				//$(this).css("font-size", initFontSize + ratio * 3);
-
-				
-    			break;
-    		case "image":
-    			var $id = $(this).attr('id');
-    			for (var i=0;i<page_elements.length;i++)
-				{
-					if(page_elements[i].id == $id){
-						injectImageElements(i,$id);
-					}
-				}
-				
-				//make each image element draggable and linked to the database
-				$(this).draggable({
-					stop: function(event, ui) {
-						updateElementProperties($(this).attr('id'));
-					}
-				});
-				
-				//make each image element resizable and linked to the database
-				$(this).resizable({
-					alsoResize: $(this).children(),
-					
-					stop: function(event, ui) {
-						updateElementProperties($(this).attr('id'));
-					}
-				});
-				
-    			break;
-			case "audio":
-				break;
-			case "movie":
-				break;
-    	}
- 	}); 
+	
 });
 
 // output the elements as a json array
@@ -258,13 +182,17 @@ function initElements()
 					initDiagonal = getContentDiagonal($(this).attr('id'));
 					initFontSize = parseInt($(this).css("font-size"));
 				},
+				start: function(e, ui) {
+					initDiagonal = getContentDiagonal($(ui.element).attr('id'));
+					initFontSize = parseInt($(ui.element).css("font-size"));
+				},
 				resize: function(e, ui) {
-					var newDiagonal = getContentDiagonal($(this).attr('id'));
+					var newDiagonal = getContentDiagonal($(ui.element).attr('id'));
 					var ratio = newDiagonal / initDiagonal;
 					$(this).css({"font-size" : initFontSize*ratio});
 				},
 				stop: function(event, ui) {
-					//updateElementProperties($(this).attr('id'));
+					console.log
 				}
 			});
 		}		
