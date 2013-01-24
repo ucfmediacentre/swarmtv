@@ -117,93 +117,20 @@ $(document).ready(function(){
 	});
 	
 	
-	// ------------------------------------------------------------------------- ELEMENTS LOOP
-	//iterate through divs on the page and instantiate them
-	$('.element').each(function() {
-		//sort out which function needs to fill the elements
-		switch ($(this).attr('type')){
-    		case "text":
-    			//ask for div id
-    			var $id = $(this).attr('id');
-    			//var initFontSize = $(this).css("font-size");
-    			for (var i=0;i<page_elements.length;i++)
-				{
-					if(page_elements[i].id == $id){
-						injectTextElements(i,$id);
-					}
-				}
-				//make each text element draggable and linked to the database
-				$(this).draggable({
-					stop: function(event, ui) {
-						updateElementProperties($(this).attr('id'));
-					}
-				});
-				
-				//make each text element resizable and linked to the database
-				$(this).resizable({
-					create: function(event, ui) {
-						initDiagonal = getContentDiagonal($(this).attr('id'));
-						initFontSize = parseInt($(this).css("font-size"));
-					},
-					resize: function(e, ui) {
-						var newDiagonal = getContentDiagonal($(this).attr('id'));
-						var ratio = newDiagonal / initDiagonal;
-						$(this).css({"font-size" : initFontSize*ratio});
-					},
-					stop: function(event, ui) {
-						updateElementProperties($(this).attr('id'));
-					}
-				});
-				
-				
-				//var newDiagonal = getContentDiagonal(this);
-				//var ratio = newDiagonal / initDiagonal;
-				//$(this).css("font-size", initFontSize + ratio * 3);
-
-				
-    			break;
-    		case "image":
-    			var $id = $(this).attr('id');
-    			for (var i=0;i<page_elements.length;i++)
-				{
-					if(page_elements[i].id == $id){
-						injectImageElements(i,$id);
-					}
-				}
-				
-				//make each image element draggable and linked to the database
-				$(this).draggable({
-					stop: function(event, ui) {
-						updateElementProperties($(this).attr('id'));
-					}
-				});
-				
-				//make each image element resizable and linked to the database
-				$(this).resizable({
-					alsoResize: $(this).children(),
-					
-					stop: function(event, ui) {
-						updateElementProperties($(this).attr('id'));
-					}
-				});
-				
-    			break;
-			case "audio":
-				break;
-			case "movie":
-				break;
-    	}
- 	}); 
+	
 });
 
+// CREATE ELEMENTS ON THE PAGE
 // output the elements as a json array
 var page_elements_json = <?php echo json_encode($page_elements); ?>;
 var page_elements = new Array();
 
 function initElements()
 {
+	// Loop through all of the elements in the json array
 	for (var i = 0; i < page_elements_json.length; i++)
 	{
+		// create the style object
 		var style = { 
 						'background-color'	:		page_elements_json[i].backgroundColor,
 						'color'				:		page_elements_json[i].color,				
@@ -216,17 +143,21 @@ function initElements()
 						'top'				:		page_elements_json[i].y+'px',
 						'z-index'  			:		page_elements_json[i].z
 					}
-
+		// create the div to contain the elements content
 		var elm = $('<div>');
 		
+		// add the id
 		$(elm).attr('id', page_elements_json[i].id);
 		
+		// add some sneaky data to the container
 		$(elm).data('page_id', page_elements_json[i].pages_id);
 		$(elm).data('license', page_elements_json[i].license);
 		
+		//add the style to the element and the generic class 
 		$(elm).css(style);
 		$(elm).addClass('element');
 		
+		// customise the element depending on its content type
 		switch (page_elements_json[i].type)
 		{
 			case 'text':
@@ -246,7 +177,7 @@ function initElements()
 		// MAKE DRAGGABLE
 		$(elm).draggable({
 			stop: function(event, ui) {
-				updateElementProperties($(this).attr('id'));
+				updateElement();
 			}
 		});
 		
@@ -259,26 +190,33 @@ function initElements()
 					initDiagonal = getContentDiagonal($(this).attr('id'));
 					initFontSize = parseInt($(this).css("font-size"));
 				},
+				start: function(e, ui) {
+					initDiagonal = getContentDiagonal($(ui.element).attr('id'));
+					initFontSize = parseInt($(ui.element).css("font-size"));
+				},
 				resize: function(e, ui) {
-					var newDiagonal = getContentDiagonal($(this).attr('id'));
-					console.log(newDiagonal);
+
+					var newDiagonal = getContentDiagonal($(ui.element).attr('id'));
+					
 					var ratio = newDiagonal / initDiagonal;
 					$(this).css({"font-size" : initFontSize*ratio});
 				},
 				stop: function(event, ui) {
-					//updateElementProperties($(this).attr('id'));
+					updateElement($(ui.element).attr('id'));
 				}
 			});
 		}		
 		
+		// add new element to the array
 		page_elements.push(elm);
 	}
 	
+	// add all the elements in the array to the page.
 	$('body').append(page_elements);
 }
 
 function getContentDiagonal(elementId) {
-	console.log("diagonal");
+	
     var contentWidth = $("#"+elementId).width()-10;
     var contentHeight = $("#"+elementId).height()-10;
     return Math.sqrt((contentWidth * contentWidth) + (contentHeight * contentHeight));
@@ -311,80 +249,8 @@ function initVideo(elm, index)
 }
 
 
-function updateElementProperties(elementId){
-  	var $elementType = $('#'+elementId).attr('type');
-  	var $pageElementsArray
-  	for (var i=0;i<page_elements.length;i++)
-		{
-			if(page_elements[i].id == elementId){
-				$pageElementsArray = i;
-			}
-		}
-	//alert(page_elements[$pageElementsArray].contents);
-	switch ($elementType){
-		case "text":
-			page_elements[$pageElementsArray].attribution = "";
-			page_elements[$pageElementsArray].backgroundColor = $('#'+elementId).css('backgroundColor');
-			page_elements[$pageElementsArray].color = $('#'+elementId).css('color');
-			page_elements[$pageElementsArray].contents = $('#'+elementId).text();
-			page_elements[$pageElementsArray].description = "";
-			page_elements[$pageElementsArray].filename = "";
-			page_elements[$pageElementsArray].fontFamily = $('#'+elementId).css('fontFamily');
-			page_elements[$pageElementsArray].fontSize = $('#'+elementId).css('font-size');
-			page_elements[$pageElementsArray].height = $('#'+elementId).css('height');
-			page_elements[$pageElementsArray].id = elementId;
-			page_elements[$pageElementsArray].keywords = "";
-			page_elements[$pageElementsArray].license = "";
-			page_elements[$pageElementsArray].opacity = $('#'+elementId).css('opacity');
-			page_elements[$pageElementsArray].pages_id = $('#'+elementId).attr('pages_id');
-			page_elements[$pageElementsArray].textAlign = $('#'+elementId).css('text-align');
-			page_elements[$pageElementsArray].timeline = "";
-			page_elements[$pageElementsArray].type = $('#'+elementId).attr('type');
-			page_elements[$pageElementsArray].width = $('#'+elementId).css('width');
-			page_elements[$pageElementsArray].x = $('#'+elementId).css('left');
-			page_elements[$pageElementsArray].y = $('#'+elementId).css('top');
-			page_elements[$pageElementsArray].z = $('#'+elementId).css('z-index');
-			break;
-		case "image":
-			page_elements[$pageElementsArray].attribution = $('#'+elementId).attr('attribution');
-			page_elements[$pageElementsArray].backgroundColor = "";
-			page_elements[$pageElementsArray].color = "";
-			page_elements[$pageElementsArray].contents = "";
-			page_elements[$pageElementsArray].description = $('#'+elementId).children().attr('alt');
-			$url = $('#'+elementId).children().attr('src');
-			$positionOfSlash = $url.lastIndexOf("/");
-			$urlLength = $url.length;
-			$filename = $url.slice($positionOfSlash+1,$urlLength); 
-			page_elements[$pageElementsArray].filename = $filename;			
-			page_elements[$pageElementsArray].fontFamily = "";
-			page_elements[$pageElementsArray].fontSize = "";
-			page_elements[$pageElementsArray].height = $('#'+elementId).css('height');
-			page_elements[$pageElementsArray].id = elementId;
-			page_elements[$pageElementsArray].keywords = $('#'+elementId).attr('keywords');
-			page_elements[$pageElementsArray].license = $('#'+elementId).attr('license');
-			page_elements[$pageElementsArray].opacity = $('#'+elementId).css('opacity');
-			page_elements[$pageElementsArray].pages_id = $('#'+elementId).attr('pages_id');
-			page_elements[$pageElementsArray].textAlign = $('#'+elementId).css('text-align');
-			page_elements[$pageElementsArray].timeline = "";
-			page_elements[$pageElementsArray].type = $('#'+elementId).attr('type');
-			page_elements[$pageElementsArray].width = $('#'+elementId).css('width');
-			page_elements[$pageElementsArray].x = $('#'+elementId).css('left');
-			page_elements[$pageElementsArray].y = $('#'+elementId).css('top');
-			page_elements[$pageElementsArray].z = $('#'+elementId).css('z-index');
-			break;
-	}
-	
-	// Ajax the values to the pages controller 
-	//alert('elementData=' + JSON.stringify(page_elements[$pageElementsArray])); 
-	$.ajax({
-		url: base_url + 'index.php/pages/updateElement',
-		data: 'elementData=' + JSON.stringify(page_elements[$pageElementsArray]),
-		type: 'POST',
-		success: function(data, status)
-		{
-			//alert("Returned data = "+data);
-		}
-	});
+function updateElement(elementId){
+  	console.log("boom");
 }
 
 
