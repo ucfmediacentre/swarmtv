@@ -57,12 +57,6 @@ class Pages extends CI_Controller {
 		echo '{"success":true, "name": "' . $_GET['name'] . '"}';
 	}
 	
-	public function updateElement()
-	{
-		$this->load->model('Elements_model');
-		echo $this->Elements_model->updateElement();
-	}
-	
 }
 
 /* End of file pages.php */

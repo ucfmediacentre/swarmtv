@@ -23,9 +23,14 @@ class Elements extends CI_Controller {
 		
 		$this->Elements_model->validate_data() or exit($this->Elements_model->data_errors);
 		
-		$this->Elements_model->add_element_to_database($this->Elements_model->data_errors) or exit();
-		
+		$this->Elements_model->add_element_to_database($this->Elements_model->data_errors) or exit();	
 	}	
+	
+	public function update()
+	{
+		$this->load->model('Elements_model');
+		echo $this->Elements_model->update_element();
+	}
 	
 }
 

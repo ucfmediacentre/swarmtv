@@ -177,7 +177,7 @@ function initElements()
 		// MAKE DRAGGABLE
 		$(elm).draggable({
 			stop: function(event, ui) {
-				updateElement();
+				updateElement(ui.helper[0].id , 'position');
 			}
 		});
 		
@@ -202,7 +202,7 @@ function initElements()
 					$(this).css({"font-size" : initFontSize*ratio});
 				},
 				stop: function(event, ui) {
-					updateElement($(ui.element).attr('id'));
+					updateElement(ui.helper[0].id, 'size');
 				}
 			});
 		}		
@@ -226,7 +226,7 @@ function getContentDiagonal(elementId) {
 // ----------------------------------------------- TEXT
 function initText(elm, index)
 {
-	$(elm).html( unescape(page_elements_json[index].contents)); 
+	$(elm).html( unescape(page_elements_json[index].description)); 
 }
 
 // ----------------------------------------------- IMAGE
@@ -249,8 +249,33 @@ function initVideo(elm, index)
 }
 
 
-function updateElement(elementId){
-  	console.log("boom");
+function updateElement(elementId, change){
+
+	var changes = {'id':elementId};
+	
+	switch(change)
+	{
+		case 'size':
+			changes.width = parseInt($('#' + elementId).css('width'), 10);
+			changes.height = parseInt($('#' + elementId).css('height'), 10);
+			break;
+		case 'position':
+			changes.x = parseInt($('#' + elementId).css('left'), 10);
+			changes.y = parseInt(	$('#' + elementId).css('top'), 10);
+			break;
+	}
+	
+	// Ajax the values to the pages controller 
+	//alert('elementData=' + JSON.stringify(page_elements[$pageElementsArray])); 
+	$.ajax({
+		url		: base_url + 'index.php/elements/update',
+		data	: changes,
+		type	: 'POST',
+		success	: function(data, status)
+		{
+			//alert("Returned data = "+data);
+		}
+	});
 }
 
 
