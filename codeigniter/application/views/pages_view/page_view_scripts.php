@@ -120,14 +120,17 @@ $(document).ready(function(){
 	
 });
 
+// CREATE ELEMENTS ON THE PAGE
 // output the elements as a json array
 var page_elements_json = <?php echo json_encode($page_elements); ?>;
 var page_elements = new Array();
 
 function initElements()
 {
+	// Loop through all of the elements in the json array
 	for (var i = 0; i < page_elements_json.length; i++)
 	{
+		// create the style object
 		var style = { 
 						'background-color'	:		page_elements_json[i].backgroundColor,
 						'color'				:		page_elements_json[i].color,				
@@ -140,17 +143,21 @@ function initElements()
 						'top'				:		page_elements_json[i].y+'px',
 						'z-index'  			:		page_elements_json[i].z
 					}
-
+		// create the div to contain the elements content
 		var elm = $('<div>');
 		
+		// add the id
 		$(elm).attr('id', page_elements_json[i].id);
 		
+		// add some sneaky data to the container
 		$(elm).data('page_id', page_elements_json[i].pages_id);
 		$(elm).data('license', page_elements_json[i].license);
 		
+		//add the style to the element and the generic class 
 		$(elm).css(style);
 		$(elm).addClass('element');
 		
+		// customise the element depending on its content type
 		switch (page_elements_json[i].type)
 		{
 			case 'text':
@@ -197,14 +204,16 @@ function initElements()
 			});
 		}		
 		
+		// add new element to the array
 		page_elements.push(elm);
 	}
 	
+	// add all the elements in the array to the page.
 	$('body').append(page_elements);
 }
 
 function getContentDiagonal(elementId) {
-	console.log("diagonal");
+	
     var contentWidth = $("#"+elementId).width()-10;
     var contentHeight = $("#"+elementId).height()-10;
     return Math.sqrt((contentWidth * contentWidth) + (contentHeight * contentHeight));
@@ -237,80 +246,8 @@ function initVideo(elm, index)
 }
 
 
-function updateElementProperties(elementId){
-  	var $elementType = $('#'+elementId).attr('type');
-  	var $pageElementsArray
-  	for (var i=0;i<page_elements.length;i++)
-		{
-			if(page_elements[i].id == elementId){
-				$pageElementsArray = i;
-			}
-		}
-	//alert(page_elements[$pageElementsArray].contents);
-	switch ($elementType){
-		case "text":
-			page_elements[$pageElementsArray].attribution = "";
-			page_elements[$pageElementsArray].backgroundColor = $('#'+elementId).css('backgroundColor');
-			page_elements[$pageElementsArray].color = $('#'+elementId).css('color');
-			page_elements[$pageElementsArray].contents = $('#'+elementId).text();
-			page_elements[$pageElementsArray].description = "";
-			page_elements[$pageElementsArray].filename = "";
-			page_elements[$pageElementsArray].fontFamily = $('#'+elementId).css('fontFamily');
-			page_elements[$pageElementsArray].fontSize = $('#'+elementId).css('font-size');
-			page_elements[$pageElementsArray].height = $('#'+elementId).css('height');
-			page_elements[$pageElementsArray].id = elementId;
-			page_elements[$pageElementsArray].keywords = "";
-			page_elements[$pageElementsArray].license = "";
-			page_elements[$pageElementsArray].opacity = $('#'+elementId).css('opacity');
-			page_elements[$pageElementsArray].pages_id = $('#'+elementId).attr('pages_id');
-			page_elements[$pageElementsArray].textAlign = $('#'+elementId).css('text-align');
-			page_elements[$pageElementsArray].timeline = "";
-			page_elements[$pageElementsArray].type = $('#'+elementId).attr('type');
-			page_elements[$pageElementsArray].width = $('#'+elementId).css('width');
-			page_elements[$pageElementsArray].x = $('#'+elementId).css('left');
-			page_elements[$pageElementsArray].y = $('#'+elementId).css('top');
-			page_elements[$pageElementsArray].z = $('#'+elementId).css('z-index');
-			break;
-		case "image":
-			page_elements[$pageElementsArray].attribution = $('#'+elementId).attr('attribution');
-			page_elements[$pageElementsArray].backgroundColor = "";
-			page_elements[$pageElementsArray].color = "";
-			page_elements[$pageElementsArray].contents = "";
-			page_elements[$pageElementsArray].description = $('#'+elementId).children().attr('alt');
-			$url = $('#'+elementId).children().attr('src');
-			$positionOfSlash = $url.lastIndexOf("/");
-			$urlLength = $url.length;
-			$filename = $url.slice($positionOfSlash+1,$urlLength); 
-			page_elements[$pageElementsArray].filename = $filename;			
-			page_elements[$pageElementsArray].fontFamily = "";
-			page_elements[$pageElementsArray].fontSize = "";
-			page_elements[$pageElementsArray].height = $('#'+elementId).css('height');
-			page_elements[$pageElementsArray].id = elementId;
-			page_elements[$pageElementsArray].keywords = $('#'+elementId).attr('keywords');
-			page_elements[$pageElementsArray].license = $('#'+elementId).attr('license');
-			page_elements[$pageElementsArray].opacity = $('#'+elementId).css('opacity');
-			page_elements[$pageElementsArray].pages_id = $('#'+elementId).attr('pages_id');
-			page_elements[$pageElementsArray].textAlign = $('#'+elementId).css('text-align');
-			page_elements[$pageElementsArray].timeline = "";
-			page_elements[$pageElementsArray].type = $('#'+elementId).attr('type');
-			page_elements[$pageElementsArray].width = $('#'+elementId).css('width');
-			page_elements[$pageElementsArray].x = $('#'+elementId).css('left');
-			page_elements[$pageElementsArray].y = $('#'+elementId).css('top');
-			page_elements[$pageElementsArray].z = $('#'+elementId).css('z-index');
-			break;
-	}
-	
-	// Ajax the values to the pages controller 
-	//alert('elementData=' + JSON.stringify(page_elements[$pageElementsArray])); 
-	$.ajax({
-		url: base_url + 'index.php/pages/updateElement',
-		data: 'elementData=' + JSON.stringify(page_elements[$pageElementsArray]),
-		type: 'POST',
-		success: function(data, status)
-		{
-			//alert("Returned data = "+data);
-		}
-	});
+function updateElement(elementId){
+  	
 }
 
 
