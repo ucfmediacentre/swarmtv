@@ -1,6 +1,8 @@
 <div id="page_info_form_wrap">
 	
-	
+	<h1 id="page_title"> <?php echo $page_info->title; ?> </h1>	
+	<p id="page_description" > <?php echo $page_info->description; ?> </p>
+
 	<form action="#" method="get" enctype="multipart/form-data" class="hidden">
 		
 		<input type="hidden" value="<?php echo $page_info->id; ?>" name="id" />
