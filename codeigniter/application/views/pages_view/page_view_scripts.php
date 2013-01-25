@@ -142,7 +142,8 @@ function initElements()
 						'width'				:		page_elements_json[i].width+'px',
 						'left'				:		page_elements_json[i].x+'px',
 						'top'				:		page_elements_json[i].y+'px',
-						'z-index'  			:		page_elements_json[i].z
+						'z-index'  			:		page_elements_json[i].z,
+						'position'			:		'absolute'
 					}
 		
 		if (page_elements_json[i].type === 'text') style.height = 'auto';
@@ -253,19 +254,24 @@ function initVideo(elm, index)
 	$(elm).append(video_element);
 }
 
-
+// Update only the changes that have been made
 function updateElement(elementId, change){
 
+	// create an object with only the id 
 	var changes = {'id':elementId};
 	
+	// add the specific changes to the object
 	switch(change)
 	{
 		case 'size':
+			// update width and height
 			changes.width = parseInt($('#' + elementId).css('width'), 10);
 			changes.height = parseInt($('#' + elementId).css('height'), 10);
-			changes.fontSize = $('#' + elementId).css('font-size');
+			// only update font size if the element type is text (found some problems with positions otherwise)
+			if ($('#' + elementId).hasClass('text')) changes.fontSize = $('#' + elementId).css('font-size');
 			break;
 		case 'position':
+			// change the x and y for left and top ( tut tut  for mixing up terminology from data base to css )
 			changes.x = parseInt($('#' + elementId).css('left'), 10);
 			changes.y = parseInt(	$('#' + elementId).css('top'), 10);
 			break;
@@ -279,7 +285,7 @@ function updateElement(elementId, change){
 		type	: 'POST',
 		success	: function(data, status)
 		{
-			//alert("Returned data = "+data);
+			//DO NOTHING
 		}
 	});
 }

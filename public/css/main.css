@@ -109,6 +109,9 @@ textarea {
 body,html{
 	width:100%;
 	height:100%;
+	left:0px;
+	top:0px;
+	overflow:auto;
 }
 
 /*
@@ -124,8 +127,11 @@ body,html{
 	color:#ffffff;
 }
 .element{
-	position:absolute;
+	position:relative;
 	font-size:15px;
+	padding:5px;
+	margin:0px;
+	border: 1px red solid;
 }
 #page_info_form_wrap{
 	width:300px;
