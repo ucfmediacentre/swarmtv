@@ -31,7 +31,6 @@ class Elements extends CI_Controller {
 		$this->load->model('Elements_model');
 		echo $this->Elements_model->update_element();
 	}
-	
 }
 
 /* End of file Elements.php */

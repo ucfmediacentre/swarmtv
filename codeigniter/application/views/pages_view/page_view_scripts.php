@@ -53,8 +53,6 @@ $(document).ready(function(){
 	
 	// trigger the fancy box on double click
 	$('#background').dblclick(function(e){
-	
-		console.log("boom");
 		$("a#add_element_form_trigger").trigger('click');
 		
 		$('input[name="x"]').val(e.pageX);
@@ -70,12 +68,15 @@ $(document).ready(function(){
 		var pages_id = $('input[name="pages_id"]').val();
 		var x = $('input[name="x"]').val();
 		var y = $('input[name="y"]').val();
+		 
+		var linkString = checkForLinks(element_description);
+		console.log(linkString);
 		
 		// AJAX to server
 		var uri = base_url + "index.php/elements/add";
 		var xhr = new XMLHttpRequest();
 		var fd = new FormData();
-		 
+
 		xhr.open("POST", uri, true);
 		
 		xhr.onreadystatechange = function() {
@@ -92,6 +93,7 @@ $(document).ready(function(){
 		fd.append('pages_id', pages_id);
 		fd.append('x', x);
 		fd.append('y', y);
+		if (linkString != null) fd.append('linkPageIds', linkString);
 		// Initiate a multipart/form-data upload
 		xhr.send(fd);
         
@@ -159,9 +161,7 @@ function initElements()
 					}
 		
 		if (page_elements_json[i].type === 'text') style.height = 'auto';
-		
-		console.log(style);
-		
+
 		// create the div to contain the elements content
 		var elm = $('<div>');
 		
@@ -244,7 +244,7 @@ function getContentDiagonal(element) {
 // ----------------------------------------------- TEXT
 function initText(elm, index)
 {
-	$(elm).html( unescape(page_elements_json[index].description)); 
+	$(elm).html( htmlDecode(page_elements_json[index].description) ); 
 }
 
 // ----------------------------------------------- IMAGE
@@ -302,5 +302,32 @@ function updateElement(elementId, change){
 	});
 }
 
+function htmlDecode(input){
+  var e = document.createElement('div');
+  e.innerHTML = input;
+  return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+}
+
+function checkForLinks(text)
+{
+	var linkRegEx = /[a-zA-Z0-9_ ]+(?=\]\])/g;
+	
+	// check for matches
+	var matches = text.match( linkRegEx );
+	//console.log(matches);
+	var matchString = "";
+	
+	if (matches != null)
+	{
+		for (var i = 0; i < matches.length; i++)
+		{
+			matchString+= "-" + matches[i];
+		}
+		return matchString;
+	}else
+	{
+		return null;
+	}
+}
 
 </script>

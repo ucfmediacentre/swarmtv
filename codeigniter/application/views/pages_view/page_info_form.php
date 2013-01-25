@@ -13,6 +13,7 @@
 		<label for="description"> Description: </label>
         <textarea name="description"><?php echo $page_info->description; ?> </textarea>
         
+        <br />
         <label for="keywords"> Keywords: </label>
         <textarea name="keywords"><?php echo $page_info->keywords; ?> </textarea> <br /> <br />
         
