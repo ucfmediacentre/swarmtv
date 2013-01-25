@@ -136,9 +136,26 @@ body,html{
 #page_info_form_wrap{
 	width:300px;
 	position:absolute;
-	left:30px;
-	top:120px;
+	left:10px;
+	top:10px;
 	z-index:2;
+	background-color:#999;
+	border:1px #fff solid;
+}
+#page_info_form_triger{
+	background-color:#333;
+	width:100%;
+}
+#page_info_form{
+	margin:20px 10px 30px 10px;
+}
+#page_title{
+	margin:0px;
+	padding:0px;
+}
+#page_description{
+	margin:0px;
+	padding:0px;
 }
 #add_element_form{
 	width:400px;

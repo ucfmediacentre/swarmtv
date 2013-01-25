@@ -11,7 +11,19 @@ var initFontSize;
 
 $(document).ready(function(){
 	
+	// as soon as the page is ready initiate all elements on the page
 	initElements();
+	
+	// toggle the page info view
+	$('#page_info_form_triger').click(function(){
+		$('#page_info_form').toggleClass('hidden');
+	});
+	// animate color of page_info_trigger
+	$('#page_info_form_triger').hover(function(){
+		$(this).animate({ 'background-color': '#666' });
+	}, function(){
+		$(this).animate({ 'background-color': '#333' });
+	});
 	
 	// Ajax submit for updating page info 
 	$('#page_info_submit').click(function(e){
