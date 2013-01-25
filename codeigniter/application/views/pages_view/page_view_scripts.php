@@ -133,7 +133,8 @@ function initElements()
 		// create the style object
 		var style = { 
 						'background-color'	:		page_elements_json[i].backgroundColor,
-						'color'				:		page_elements_json[i].color,				
+						'color'				:		page_elements_json[i].color,
+						'font-size'			:		page_elements_json[i].fontSize + 'px',				
 						'font-family'		: 		page_elements_json[i].fontFamily,
 						'height'			:		page_elements_json[i].height+'px',
 						'opacity'			:		page_elements_json[i].opacity,
@@ -143,6 +144,11 @@ function initElements()
 						'top'				:		page_elements_json[i].y+'px',
 						'z-index'  			:		page_elements_json[i].z
 					}
+		
+		if (page_elements_json[i].type === 'text') style.height = 'auto';
+		
+		console.log(style);
+		
 		// create the div to contain the elements content
 		var elm = $('<div>');
 		
@@ -156,6 +162,7 @@ function initElements()
 		//add the style to the element and the generic class 
 		$(elm).css(style);
 		$(elm).addClass('element');
+		$(elm).addClass(page_elements_json[i].type);
 		
 		// customise the element depending on its content type
 		switch (page_elements_json[i].type)
@@ -187,22 +194,20 @@ function initElements()
 		{
 			$(elm).resizable({
 				create: function(event, ui) {
-					initDiagonal = getContentDiagonal($(this).attr('id'));
-					initFontSize = parseInt($(this).css("font-size"));
+					
 				},
 				start: function(e, ui) {
-					initDiagonal = getContentDiagonal($(ui.element).attr('id'));
+					initDiagonal = getContentDiagonal(this);
 					initFontSize = parseInt($(ui.element).css("font-size"));
 				},
 				resize: function(e, ui) {
-
-					var newDiagonal = getContentDiagonal($(ui.element).attr('id'));
-					
+					var newDiagonal = getContentDiagonal(this);
 					var ratio = newDiagonal / initDiagonal;
 					$(this).css({"font-size" : initFontSize*ratio});
 				},
 				stop: function(event, ui) {
 					updateElement(ui.helper[0].id, 'size');
+					if ($(this).hasClass('text')) $(this).css({'height':'auto'});
 				}
 			});
 		}		
@@ -215,10 +220,10 @@ function initElements()
 	$('body').append(page_elements);
 }
 
-function getContentDiagonal(elementId) {
+function getContentDiagonal(element) {
 	
-    var contentWidth = $("#"+elementId).width()-10;
-    var contentHeight = $("#"+elementId).height()-10;
+    var contentWidth = $(element).width()-10;
+    var contentHeight = $(element).height()-10;
     return Math.sqrt((contentWidth * contentWidth) + (contentHeight * contentHeight));
 }
 
@@ -258,6 +263,7 @@ function updateElement(elementId, change){
 		case 'size':
 			changes.width = parseInt($('#' + elementId).css('width'), 10);
 			changes.height = parseInt($('#' + elementId).css('height'), 10);
+			changes.fontSize = $('#' + elementId).css('font-size');
 			break;
 		case 'position':
 			changes.x = parseInt($('#' + elementId).css('left'), 10);
