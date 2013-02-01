@@ -56,7 +56,7 @@ class Links_model extends CI_Model {
 		// add a new key with array to link info
 		$link_info['replace'] = array();
 		// loop through each link
-		for ($i = 0; $i < sizeof($link_info); $i++)
+		for ($i = 0; $i < sizeof($link_info['links']); $i++)
 		{
 			// compile data
 			$data = array(
@@ -74,9 +74,17 @@ class Links_model extends CI_Model {
 		return ($link_info);
 	}
 	
-	// 
+	// recreate the content with the link ids instead of the page titles 
 	function replace_titles_with_insert_ids($link_info)
 	{
+		// put the first part of the content in
+		$content = $link_info['parts'][0];
 		
+		// loop through the links adding the link id then the next part
+		for ($i = 0; $i < sizeof($link_info['links']); $i++)
+		{
+			$content = $content . $link_info['replace'][$i] . $link_info['parts'][$i+1];
+		}
+		return $content;	
 	} 
 }

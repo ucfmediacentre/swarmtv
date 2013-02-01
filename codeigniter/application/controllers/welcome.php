@@ -32,7 +32,7 @@ class Welcome extends CI_Controller {
 		
 		$db_results = $this->links_model->add_links($break_apart, 1, 1);
 		
-		$final_string = $this->links_model->replace_titles_with_insert_ids();
+		$final_string = $this->links_model->replace_titles_with_insert_ids($db_results);
 		
 		echo $final_string;
 	}
