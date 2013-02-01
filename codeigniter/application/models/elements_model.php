@@ -125,6 +125,7 @@ class Elements_model extends CI_Model {
 		{
 			$description = $post_data['description'];
 			$description = htmlspecialchars($description, ENT_QUOTES);
+			
 			$this->data['description'] = $description;
 		}
 		
@@ -178,6 +179,14 @@ class Elements_model extends CI_Model {
    		return $this->db->insert_id();
 	}
 	
+	function update_description($id, $description)
+	{
+		$data = array( 'description' => $description);
+
+		$this->db->where('id', $id);
+		$this->db->update('elements', $data); 
+	}
+	
 	// clean up your mess mr parker... no file left behind
 	private function remove_orthan_file()
 	{
@@ -191,5 +200,15 @@ class Elements_model extends CI_Model {
 		$this->db->where('id', $data["id"]);
 		$this->db->update('elements', $data); 
 		return $this->db->affected_rows();
+   }
+   
+   public function return_description()
+   {
+   		return $this->data['description'];
+   }
+   
+   public function return_pages_id()
+   {
+   		return $this->data['pages_id'];
    }
 }
