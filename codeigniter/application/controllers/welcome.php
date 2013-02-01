@@ -21,6 +21,23 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('welcome_message');
 	}
+	
+	public function links()
+	{
+		$string = "perhaps this would be easier to debug it said[[hello]] how are you instead [[ere minate]]of this one [[this one]]perhaps this would be easier to debug it said[[hello]] how are you instead [[ere minate]]of this one [[this one]] dafsdf adsfasd fasdfasf";
+		
+		$this->load->model('links_model');
+		
+		$break_apart = $this->links_model->parse_string_for_links($string);
+		
+		$db_results = $this->links_model->add_links($break_apart, 1, 1);
+		
+		$final_string = $this->links_model->replace_titles_with_insert_ids();
+		
+		echo $final_string;
+	}
+	
+	
 }
 
 /* End of file welcome.php */

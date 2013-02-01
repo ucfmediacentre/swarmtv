@@ -50,21 +50,33 @@ class Links_model extends CI_Model {
 		return $result;
 	}
 	
+	// save the new links to the database
 	function add_links($link_info, $page_id, $element_id)
 	{
+		// add a new key with array to link info
 		$link_info['replace'] = array();
 		// loop through each link
-		for ($i = 0; $i < sizeof($linkInfo); $i++)
+		for ($i = 0; $i < sizeof($link_info); $i++)
 		{
-			$data['pagesTitle'] = $linkInfo['links'][$i];
-			$data['elementsId'] = $element_id;
-			
-			if ($this->db->insert('links', $this->data))
+			// compile data
+			$data = array(
+  				'pagesTitle' =>  $link_info['links'][$i][0],
+   				'elementsId' => $element_id,
+			);
+			// add to the database
+			if($this->db->insert('links', $data))
 			{
-				array_push($linkInfo['replace'], $this->db->insert_id()
+				// assign the new id to the link
+				array_push($link_info['replace'], $this->db->insert_id());
 			}
 		}
-		return ($links_info)
+		// return info array updated with each link id
+		return ($link_info);
 	}
-	 
+	
+	// 
+	function replace_titles_with_insert_ids($link_info)
+	{
+		
+	} 
 }
