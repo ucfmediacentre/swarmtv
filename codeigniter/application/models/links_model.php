@@ -50,6 +50,21 @@ class Links_model extends CI_Model {
 		return $result;
 	}
 	
-	
+	function add_links($link_info, $page_id, $element_id)
+	{
+		$link_info['replace'] = array();
+		// loop through each link
+		for ($i = 0; $i < sizeof($linkInfo); $i++)
+		{
+			$data['pagesTitle'] = $linkInfo['links'][$i];
+			$data['elementsId'] = $element_id;
+			
+			if ($this->db->insert('links', $this->data))
+			{
+				array_push($linkInfo['replace'], $this->db->insert_id()
+			}
+		}
+		return ($links_info)
+	}
 	 
 }
