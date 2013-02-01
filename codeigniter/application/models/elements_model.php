@@ -125,6 +125,7 @@ class Elements_model extends CI_Model {
 		{
 			$description = $post_data['description'];
 			$description = htmlspecialchars($description, ENT_QUOTES);
+			
 			$this->data['description'] = $description;
 		}
 		
@@ -166,7 +167,6 @@ class Elements_model extends CI_Model {
 	function add_element_to_database()
 	{
 		if (!$this->db->insert('elements', $this->data))
-		
 		{
 			// should probably check to see if a page exist with this id as well?
 			$this->data_errors = "There was an error adding element to the database";
@@ -177,6 +177,14 @@ class Elements_model extends CI_Model {
 			exit;
 		} 
    		return $this->db->insert_id();
+	}
+	
+	function update_description($id, $description)
+	{
+		$data = array( 'description' => $description);
+
+		$this->db->where('id', $id);
+		$this->db->update('elements', $data); 
 	}
 	
 	// clean up your mess mr parker... no file left behind
@@ -192,5 +200,15 @@ class Elements_model extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->update('elements', $this->input->post()); 
 		return $this->db->affected_rows();
+   }
+   
+   public function return_description()
+   {
+   		return $this->data['description'];
+   }
+   
+   public function return_pages_id()
+   {
+   		return $this->data['pages_id'];
    }
 }
