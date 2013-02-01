@@ -86,5 +86,34 @@ class Links_model extends CI_Model {
 			$content = $content . $link_info['replace'][$i] . $link_info['parts'][$i+1];
 		}
 		return $content;	
+	}
+	
+	// parts - links in the associative array
+	// return content with all the links embeded
+	function insert_links()
+	{
+		// put the first part of the content in
+		$content = $link_info['parts'][0];
+		
+		// loop through the short codes adding html links 
+		for ($i = 0; $i < sizeof($link_info['links']); $i++)
+		{
+			// 
+			$content = $content . $link_info['replace'][$i] . $link_info['parts'][$i+1];
+		}
+		return $content;	
 	} 
+	
+	function get_link_by_id($id)
+	{
+		$query = $this->db->get_where('links', array('id' => $id));
+		if ($query->num_rows() > 0)
+		{
+   			$row = $query->row(); 
+   			return $row;
+		}else
+		{
+			return false;
+		}	
+	}
 }
