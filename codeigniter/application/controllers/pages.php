@@ -30,9 +30,6 @@ class Pages extends CI_Controller {
 			
 			$page_elements= $this->Elements_model->get_all_elements($page_details->id);
 			
-			// process the links 
-			
-			
 			$data['page_elements'] = $page_elements;
 			
 			// load view with data
@@ -45,7 +42,6 @@ class Pages extends CI_Controller {
 		}else
 		{
 			//echo 'page was not found!';
-			
 			$page_id=$this->Pages_model->insert_page($page_title);
 			echo $page_id . " page created";
 			//$data['page_id'] = $page_id

@@ -42,7 +42,23 @@ class Elements_model extends CI_Model {
     {
     	$query = $this->db->get_where('elements', array('pages_id' => $page_id));
     	
-    	return $query->result_array();
+    	// loop through each element and update the description
+    	$elements = $query->result_array();
+    	
+    	for ($i = 0; $i < sizeof($elements); $i++)
+    	{
+    		$description = $elements[$i]['description'];
+
+			// break up the parts of the description
+			$break_apart_description = $this->Links_model->parse_string_for_links($description);
+		
+			// piece the content back together with the html links embedded
+			$processed_content = $this->Links_model->insert_links($break_apart_description);
+			
+			//update the description
+			$elements[$i]['description'] = $processed_content;
+    	}
+    	return $elements;
     }
 
 	// validate the file using magic-bytes

@@ -17,6 +17,7 @@ class Links_model extends CI_Model {
 	function parse_string_for_links($string)
 	{
 		$pattern = "/(?<=\[\[)[\w ]+(?=\]\])/"; // [[ ... ]] regex
+		
 		$links = null;							// array to store results of regex					
 		$cursor = 0;							// cursor to keep track of the substring start position
 		$parts = array();						// to store the parts either side of the links
@@ -47,6 +48,8 @@ class Links_model extends CI_Model {
 		// create and associative array of the results and return it
 		$result['links'] = $links[0];
 		$result['parts'] = $parts;
+		
+		//print_r($result);
 		return $result;
 	}
 	
@@ -90,7 +93,7 @@ class Links_model extends CI_Model {
 	
 	// parts - links in the associative array
 	// return content with all the links embeded
-	function insert_links()
+	function insert_links($link_info)
 	{
 		// put the first part of the content in
 		$content = $link_info['parts'][0];
@@ -99,16 +102,18 @@ class Links_model extends CI_Model {
 		for ($i = 0; $i < sizeof($link_info['links']); $i++)
 		{
 			// get the link id
-			$link_id = $link_info['links'][$i];
+			$link_id = $link_info['links'][$i][0];
 			
 			// get the link details
-			$link = get_link_by_id($link_id);
+			$link = $this->get_link_by_id($link_id);
 			
 			// construct: <a href="<page_title>"><page_title></a>
 			$html_link = '<a href="' . $link->pagesTitle . '">' . $link->pagesTitle . '</a>';
 			
+			$content = $content . $html_link . $link_info['parts'][$i+1];
 			
-			$content = $content . $link_info['replace'][$i] . $link_info['parts'][$i+1];
+			$content = str_replace("[[", "", $content);
+			$content = str_replace("]]", "", $content);
 		}
 		return $content;	
 	} 
