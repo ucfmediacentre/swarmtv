@@ -43,8 +43,8 @@ class Pages extends CI_Controller {
 		{
 			//echo 'page was not found!';
 			$page_id=$this->Pages_model->insert_page($page_title);
-			echo $page_id . " page created";
-			//$data['page_id'] = $page_id
+			redirect('/pages/view/'.$page_title, 'location');
+			
 		}
 	}
 	
