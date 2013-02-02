@@ -26,7 +26,13 @@ class Pages extends CI_Controller {
 		{
 			// get the page elements
 			$this->load->model('Elements_model');
+			$this->load->model('Links_model');
+			
 			$page_elements= $this->Elements_model->get_all_elements($page_details->id);
+			
+			// process the links 
+			
+			
 			$data['page_elements'] = $page_elements;
 			
 			// load view with data

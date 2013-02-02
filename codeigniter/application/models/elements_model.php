@@ -37,12 +37,15 @@ class Elements_model extends CI_Model {
 		$this->load->library('upload', $config);
     }
     
+    // get all of the elements for a page
     function get_all_elements($page_id)
     {
     	$query = $this->db->get_where('elements', array('pages_id' => $page_id));
+    	
     	return $query->result_array();
     }
 
+	// validate the file using magic-bytes
 	function validate_file()
 	{
 		$file = $_FILES['file'];
@@ -193,22 +196,23 @@ class Elements_model extends CI_Model {
 		unlink('assets/' . $this->type . '/' . $filename);	
 	}
 	
+	// 
 	public function update_element()
-   {
+    {
    		$id = $this->input->post('id');
 
 		$this->db->where('id', $id);
 		$this->db->update('elements', $this->input->post()); 
 		return $this->db->affected_rows();
-   }
+   	}
    
-   public function return_description()
-   {
-   		return $this->data['description'];
-   }
-   
-   public function return_pages_id()
-   {
-   		return $this->data['pages_id'];
-   }
+	public function return_description()
+	{
+		return $this->data['description'];
+	}
+	
+	public function return_pages_id()
+	{
+		return $this->data['pages_id'];
+	}
 }

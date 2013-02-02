@@ -45,7 +45,6 @@ class Elements extends CI_Controller {
 			
 		//update the description
 		$this->Elements_model->update_description($return_id, $processed_content);
->>>>>>> catch-up-session
 	}	
 	
 	public function update()
