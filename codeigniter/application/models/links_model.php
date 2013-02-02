@@ -98,7 +98,16 @@ class Links_model extends CI_Model {
 		// loop through the short codes adding html links 
 		for ($i = 0; $i < sizeof($link_info['links']); $i++)
 		{
-			// 
+			// get the link id
+			$link_id = $link_info['links'][$i];
+			
+			// get the link details
+			$link = get_link_by_id($link_id);
+			
+			// construct: <a href="<page_title>"><page_title></a>
+			$html_link = '<a href="' . $link->pagesTitle . '">' . $link->pagesTitle . '</a>';
+			
+			
 			$content = $content . $link_info['replace'][$i] . $link_info['parts'][$i+1];
 		}
 		return $content;	
