@@ -244,7 +244,8 @@ function getContentDiagonal(element) {
 // ----------------------------------------------- TEXT
 function initText(elm, index)
 {
-	$(elm).html( htmlDecode(page_elements_json[index].description) ); 
+	//console.log( page_elements_json[index].description);
+	$(elm).html( page_elements_json[index].description ); 
 }
 
 // ----------------------------------------------- IMAGE
