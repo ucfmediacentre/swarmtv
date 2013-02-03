@@ -128,6 +128,13 @@ body,html{
 	position:absolute;
 	font-size:15px;
 }
+.element:hover{
+	cursor: hand; cursor: pointer;
+	border-style: dashed;
+	border-color: #666;
+	border-width: 1.5px;
+}
+
 #page_info_form_wrap{
 	width:300px;
 	position:absolute;
