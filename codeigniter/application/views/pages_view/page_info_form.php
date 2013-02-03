@@ -1,5 +1,5 @@
 <div id="page_info_form_wrap">
-	
+	<div id="swarmtv_logo"></div>
 	<h1 id="page_title"> <?php echo $page_info->title; ?> </h1>
 	<p id="page_description" > <?php echo $page_info->description; ?> </p>
 	

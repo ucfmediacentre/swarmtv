@@ -39,6 +39,9 @@ $(document).ready(function(){
 		'showCloseButton':false,
 	});
 	
+	// init swarmtv logo
+	$('#swarmtv_logo').append('<a href="'+base_url+'/pages/view/home" alt="Swarm TV logo" border="0"><img src="'+base_url+'/img/swarmtvLogo.gif"></a>');
+	
 	// trigger the fancy box on double click
 	$('#background').dblclick(function(e){
 	
