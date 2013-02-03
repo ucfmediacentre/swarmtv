@@ -110,8 +110,10 @@ class Links_model extends CI_Model {
 			// construct: <a href="<page_title>"><page_title></a>
 			$html_link = '<a href="' . $link->pagesTitle . '">' . $link->pagesTitle . '</a>';
 			
+			// construct the parts to make the full content
 			$content = $content . $html_link . $link_info['parts'][$i+1];
 			
+			// remove and brackets 
 			$content = str_replace("[[", "", $content);
 			$content = str_replace("]]", "", $content);
 		}

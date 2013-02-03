@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Swarm extends CI_Controller {
+class Swarmtv extends CI_Controller {
 
 	public function index()
 	{
@@ -14,7 +14,8 @@ class Swarm extends CI_Controller {
 	
 	public function stats()
 	{
-		$this->load->view('welcome_message');
+		//$this->load->view('welcome_message');
+		
 	}
 }
 
