@@ -11,6 +11,7 @@
 		width:100%;
 		height:100%;
 		padding:0px;
+		overflow:hidden;
 	}
 	
 	#the-swarm{
@@ -22,9 +23,10 @@
 	</style>
 </head>
 <body>
-	<canvas id="the-swarm" width="1200" height="700"></canvas>
+	<canvas id="the-swarm"></canvas>
 
-	<?php echo $pages ?>
+	<?php //echo $pages; 
+	?>
 	
 	<script src="<?php echo base_url(); ?>libraries/arbor/lib/arbor.js"></script>
 	<script src="<?php echo base_url(); ?>libraries/arbor/lib/arbor-tween.js"></script>
@@ -39,7 +41,10 @@
 (function($){
 
   var Renderer = function(canvas){
-    var canvas = $(canvas).get(0)
+    var canvas = $(canvas).get(0);
+    canvas.width  = window.innerWidth;
+	canvas.height = window.innerHeight;
+    
     var ctx = canvas.getContext("2d");
     var particleSystem
 
