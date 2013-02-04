@@ -12,6 +12,12 @@
 		height:100%;
 		padding:0px;
 		overflow:hidden;
+		background-image:url(../css/img/default_background.jpg);
+		background-color:#000033;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
 	}
 	
 	#the-swarm{
@@ -25,22 +31,24 @@
 <body>
 	<canvas id="the-swarm"></canvas>
 
-	<?php //echo $pages; 
-	?>
+	<img id="bg" src="<?php echo base_url(); ?>img/default_background.jpg" style="display:none;"/>
 	
 	<script src="<?php echo base_url(); ?>libraries/arbor/lib/arbor.js"></script>
 	<script src="<?php echo base_url(); ?>libraries/arbor/lib/arbor-tween.js"></script>
 	
 	<script type="text/javascript">
 	//
-//  main.js
-//
-//  A project template for using arbor.js
-//
+	//  main.js
+	//
+	//  A project template for using arbor.js
+	//
 
 (function($){
 
-  var Renderer = function(canvas){
+	var links = <?php echo $links;?>;
+	var img=document.getElementById("bg");
+
+  	var Renderer = function(canvas){
     var canvas = $(canvas).get(0);
     canvas.width  = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -78,21 +86,26 @@
         // which allow you to step through the actual node objects but also pass an
         // x,y point in the screen's coordinate system
         // 
-        ctx.fillStyle = "white"
-        ctx.fillRect(0,0, canvas.width, canvas.height)
+        //ctx.fillStyle = "white"
+        ctx.drawImage(img,0,0,canvas.width, canvas.height);
         
         particleSystem.eachEdge(function(edge, pt1, pt2){
           // edge: {source:Node, target:Node, length:#, data:{}}
           // pt1:  {x:#, y:#}  source position in screen coords
           // pt2:  {x:#, y:#}  target position in screen coords
-
+		  //console.log(edge);	
+			
           // draw a line from pt1 to pt2
-          ctx.strokeStyle = "rgba(0,0,0, .333)"
-          ctx.lineWidth = 1
-          ctx.beginPath()
-          ctx.moveTo(pt1.x, pt1.y)
-          ctx.lineTo(pt2.x, pt2.y)
-          ctx.stroke()
+          ctx.strokeStyle = "orange";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(pt1.x, pt1.y);
+          ctx.lineTo(pt2.x, pt2.y);
+          ctx.stroke();
+          
+          //console.log(edge);
+          //ctx.fillStyle = "orange";
+          //ctx.fillText(edge._id, pt1.x, pt1.y);
         })
 
         particleSystem.eachNode(function(node, pt){
@@ -101,8 +114,10 @@
 
           // draw a rectangle centered at pt
           var w = 10
-          ctx.fillStyle = (node.data.alone) ? "orange" : "black"
-          ctx.fillRect(pt.x-w/2, pt.y-w/2, w,w)
+          ctx.fillStyle = "orange";
+          ctx.fillRect(pt.x-w/2, pt.y-w/2, w,w);
+           ctx.fillStyle = "white";
+          ctx.fillText(node.name, pt.x, pt.y);
         })    			
       },
       
@@ -125,7 +140,8 @@
 
             $(canvas).bind('mousemove', handler.dragged)
             $(window).bind('mouseup', handler.dropped)
-
+			console.log(dragged);
+			window.location.href = 'pages/view/' + dragged.node.name;
             return false
           },
           dragged:function(e){
@@ -162,33 +178,31 @@
   }    
 
   $(document).ready(function(){
+  
     var sys = arbor.ParticleSystem(1000, 600, 0.5) // create the system with sensible repulsion/stiffness/friction
     sys.parameters({gravity:true}) // use center-gravity to make the graph settle nicely (ymmv)
     sys.renderer = Renderer("#the-swarm") // our newly created renderer will have its .init() method called shortly by sys...
 
-    // add some nodes to the graph and watch it go...
-    sys.addEdge('a','b')
-    sys.addEdge('a','c')
-    sys.addEdge('a','d')
-    sys.addEdge('a','e')
-    sys.addNode('f', {alone:true, mass:.25})
-
-    // or, equivalently:
-    //
-    // sys.graft({
-    //   nodes:{
-    //     f:{alone:true, mass:.25}
-    //   }, 
-    //   edges:{
-    //     a:{ b:{},
-    //         c:{},
-    //         d:{},
-    //         e:{}
-    //     }
-    //   }
-    // })
+	for (var i = 0; i < links.length; i++)
+	{
+		if (links[i].link_tree.length > 0)
+		{
+			for (var m = 0; m < links[i].link_tree.length; m++)
+			{
+				var edge = sys.addEdge( links[i].title , links[i].link_tree[m].pagesTitle);
+				edge.n1 = links[i].title;
+				edge.n2 = links[i].link_tree[m].pagesTitle;
+				console.log(edge);
+			}
+		}else
+		{
+			sys.addNode(links[i].title, {alone:true, mass:.25})
+		}
+	}
     
   })
+
+	
 
 })(this.jQuery)
 	</script>

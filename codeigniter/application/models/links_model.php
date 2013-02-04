@@ -54,7 +54,7 @@ class Links_model extends CI_Model {
 	}
 	
 	// save the new links to the database
-	function add_links($link_info, $page_id, $element_id)
+	function add_links($link_info, $page_title, $element_id)
 	{
 		// add a new key with array to link info
 		$link_info['replace'] = array();
@@ -65,6 +65,7 @@ class Links_model extends CI_Model {
 			$data = array(
   				'pagesTitle' =>  $link_info['links'][$i][0],
    				'elementsId' => $element_id,
+   				'parentTitle' => $page_title
 			);
 			// add to the database
 			if($this->db->insert('links', $data))
@@ -131,5 +132,32 @@ class Links_model extends CI_Model {
 		{
 			return false;
 		}	
+	}
+	
+	// output all of the links as json
+	function get_links()
+	{
+		$query = $this->db->get('links');
+		$results = $query->result_array();
+		$results = json_encode($results);
+		return $results;
+	}
+	
+	// get only unique page titles from links
+	function get_unique_page_titles()
+	{
+		$query = $this->db->query('SELECT DISTINCT pagesTitle FROM links');
+		$results = $query->result_array();
+		$results = json_encode($results);
+		return $results;
+	}
+	
+	// return all the links for specific page
+	function return_links_for_page($page_title)
+	{
+		$this->db->where('parentTitle', $page_title);
+		$query = $this->db->get('links');
+		$result = $query->result_array();
+		return $result;
 	}
 }

@@ -14,11 +14,23 @@ class Pages_model extends CI_Model {
     function get_all_pages()
     {
     	$query = $this->db->get('pages');
+		if ($query->num_rows() > 0)
+		{ 
+   			return $query->result_array();
+   		}else
+   		{
+   			return false;
+   		}
+    }
+    
+    function get_all_page_links()
+    {
+    	$query = $this->db->get('pages');
 
 		$listview = '';
 		foreach ($query->result() as $row)
 		{
-    		$listview = $listview . '<a href="' . site_url("pages/view/" . $row->id ) . '">' . $row->title . '</a><br />';
+    		$listview = $listview . '<a href="' . site_url("pages/view/" . $row->title ) . '">' . $row->title . '</a><br />';
 		}
 		return $listview;
     }
@@ -34,6 +46,30 @@ class Pages_model extends CI_Model {
    		{
    			return false;
    		}
+   }
+   
+   function get_titles()
+   {
+   		$this->db->select('title');
+		$query = $this->db->get('pages');
+		$result = $query->result_array();
+		return json_encode($result);
+   }
+   
+   function get_title($id)
+   {
+   		$this->db->where('id', $id);
+   		$this->db->select('title');
+   		$query = $this->db->get('pages');
+		
+		if ($query->num_rows() > 0)
+		{
+		   $row = $query->row(); 
+			return $row->title;
+		}else
+		{
+			return null;
+		}
    }
    
    public function insert_page($page_title)
@@ -65,5 +101,4 @@ class Pages_model extends CI_Model {
 		$this->db->update('pages', $data); 
 		return $this->db->affected_rows();
    }
-
 }

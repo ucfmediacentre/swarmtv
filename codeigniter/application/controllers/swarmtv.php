@@ -4,10 +4,22 @@ class Swarmtv extends CI_Controller {
 
 	public function index()
 	{
+		$this->load->model('Links_model');
 		$this->load->model('Pages_model');
+		
+		// get all pages
 		$pages = $this->Pages_model->get_all_pages();
 		
-		$data['pages'] = $pages;
+		for ($i = 0; $i < sizeof($pages); $i++)
+		{
+			//print_r($pages[$i]);
+			$linked_pages = $this->Links_model->return_links_for_page($pages[$i]['title']);
+			$pages[$i]['link_tree'] = $linked_pages;
+		}
+		
+		$pages = json_encode($pages);
+		
+		$data['links'] = $pages;
 		
 		$this->load->view('swarm_home', $data);
 	}
