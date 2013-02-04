@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Welcome to CodeIgniter</title>
+	<title>SwarmTv</title>
 	
 	<script src="<?php echo base_url(); ?>js/vendor/jquery-1.8.3.min.js"></script>
 
@@ -190,16 +190,12 @@
 			for (var m = 0; m < links[i].link_tree.length; m++)
 			{
 				var edge = sys.addEdge( links[i].title , links[i].link_tree[m].pagesTitle);
-				edge.n1 = links[i].title;
-				edge.n2 = links[i].link_tree[m].pagesTitle;
-				console.log(edge);
 			}
 		}else
 		{
 			sys.addNode(links[i].title, {alone:true, mass:.25})
 		}
-	}
-    
+	 }
   })
 
 	

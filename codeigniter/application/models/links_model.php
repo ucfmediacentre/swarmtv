@@ -92,6 +92,22 @@ class Links_model extends CI_Model {
 		return $content;	
 	}
 	
+	// one function to encapsulate the 3 steps to processing links
+	// later on consider adding delete all links from element id function
+	function process_links($string, $pages_title, $elements_id)
+	{
+		// break up the parts of the description
+		$break_apart_string = $this->parse_string_for_links($string);
+	
+		// save the links to the database
+		$links_to_db_results = $this->add_links($break_apart_string, $pages_title, $elements_id);
+	
+		// piece the content back together with the link ids instead of the page titles
+		$processed_string = $this->replace_titles_with_insert_ids($links_to_db_results);
+		
+		return ($processed_string);
+	}
+	
 	// parts - links in the associative array
 	// return content with all the links embeded
 	function insert_links($link_info)
@@ -159,5 +175,11 @@ class Links_model extends CI_Model {
 		$query = $this->db->get('links');
 		$result = $query->result_array();
 		return $result;
+	}
+	
+	function delete_links_by_element_id($elements_id)
+	{
+		$this->db->delete('links', array('elementsId' => $elements_id)); 
+		
 	}
 }

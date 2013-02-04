@@ -53,10 +53,21 @@ class Elements_model extends CI_Model {
 			$break_apart_description = $this->Links_model->parse_string_for_links($description);
 		
 			// piece the content back together with the html links embedded
-			$processed_content = $this->Links_model->insert_links($break_apart_description);
+			$processed_description = $this->Links_model->insert_links($break_apart_description);
 			
 			//update the description
-			$elements[$i]['description'] = $processed_content;
+			$elements[$i]['description'] = $processed_description;
+			
+			$contents = $elements[$i]['contents'];
+
+			// break up the parts of the description
+			$break_apart_contents = $this->Links_model->parse_string_for_links($contents);
+		
+			// piece the content back together with the html links embedded
+			$processed_contents = $this->Links_model->insert_links($break_apart_contents);
+			
+			//update the description
+			$elements[$i]['contents'] = $processed_contents;
     	}
     	return $elements;
     }
@@ -148,6 +159,14 @@ class Elements_model extends CI_Model {
 			$this->data['description'] = $description;
 		}
 		
+		if (array_key_exists('contents', $post_data))
+		{
+			$contents = $post_data['contents'];
+			$contents = htmlspecialchars($contents, ENT_QUOTES);
+			
+			$this->data['contents'] = $contents;
+		}
+		
 		// check pages_id
 		if (array_key_exists('pages_id', $post_data))
 		{	
@@ -206,6 +225,14 @@ class Elements_model extends CI_Model {
 		$this->db->update('elements', $data); 
 	}
 	
+	function update_contents($id, $contents)
+	{
+		$data = array( 'contents' => $contents);
+
+		$this->db->where('id', $id);
+		$this->db->update('elements', $data); 
+	}
+	
 	// clean up your mess mr parker... no file left behind
 	private function remove_orthan_file()
 	{
@@ -224,7 +251,24 @@ class Elements_model extends CI_Model {
    
 	public function return_description()
 	{
-		return $this->data['description'];
+		if (isset($this->data['description']))
+		{
+			return $this->data['description'];
+		}else
+		{
+			return false;
+		}
+	}
+	
+	public function return_contents()
+	{
+		if (isset($this->data['contents']))
+		{
+			return $this->data['contents'];
+		}else
+		{
+			return false;
+		}
 	}
 	
 	public function return_pages_id()

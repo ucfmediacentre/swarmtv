@@ -28,26 +28,29 @@ class Elements extends CI_Controller {
 		$return_id = $this->Elements_model->add_element_to_database($this->Elements_model->data_errors) or exit();
 		
 		// process links for element
+		// *** PROCESS THE LINKS IN THE DESCRIPTION & CONTENT***
 		
-		// *** PROCESS THE LINKS IN THE DESCRIPTION ***
-		
-		// get the description and page id
-		$description = $this->Elements_model->return_description();
+		// get more page details
 		$pages_id = $this->Elements_model->return_pages_id();
-		
 		$pages_title = $this->Pages_model->get_title($pages_id);
 		
-		// break up the parts of the description
-		$break_apart_description = $this->Links_model->parse_string_for_links($description);
-	
-		// save the links to the database
-		$links_to_db_results = $this->Links_model->add_links($break_apart_description, $pages_title, $return_id);
-	
+		// get the DESCRIPTION
+		$description = $this->Elements_model->return_description();
+		
 		// piece the content back together with the link ids instead of the page titles
-		$processed_content = $this->Links_model->replace_titles_with_insert_ids($links_to_db_results);
+		$processed_description = $this->Links_model->process_links($description, $pages_title, $return_id);
+			
+		//update the CONTENTS
+		$this->Elements_model->update_description($return_id, $processed_description);
+		
+		// get the content
+		$contents = $this->Elements_model->return_contents();
+		
+		// piece the content back together with the link ids instead of the page titles
+		$processed_contents = $this->Links_model->process_links($contents, $pages_title, $return_id);
 			
 		//update the description
-		$this->Elements_model->update_description($return_id, $processed_content);
+		$this->Elements_model->update_contents($return_id, $processed_contents);
 	}	
 	
 	public function update()

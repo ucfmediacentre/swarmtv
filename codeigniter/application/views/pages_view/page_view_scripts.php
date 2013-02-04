@@ -59,6 +59,46 @@ $(document).ready(function(){
 		$('input[name="y"]').val(e.pageY);
 	});
 	
+	// double click elements
+	$('.element').dblclick(function(){
+		
+		// Only allow inline editing for text elements
+		if( $(this).hasClass('text') )
+		{
+			// make content editable and disable drag
+			$(this).attr('contenteditable','true');
+			$(this).draggable({ disabled: true });
+			
+			// listen for when the user shifts focus out of the box
+			$(this).bind('focusout', updateTextElementContent);
+			
+			// callback for focus out
+			function updateTextElementContent()
+			{
+				// remove the event
+				$(this).unbind('focusout', updateTextElementContent);
+			
+				// undo changes to element for editing
+				$(this).removeAttr('contenteditable');
+				$(this).draggable({ disabled: false });	
+				
+				// get the id of the container
+				var link_id = $(this).attr('id');
+				
+				// get the  a list of all links
+				var links = $(this).find('a'); 
+				
+				$.each( links, function( key, value ) {
+  					var page_title = $(this).html();
+  					$(this).replaceWith('[[' + page_title + ']]');
+				});
+				
+				
+				console.log($(this).html());
+			}
+		}
+	});
+	
 	// Ajax for adding element
 	$('#submit_element').click(function(e){
 		e.preventDefault();
@@ -82,14 +122,24 @@ $(document).ready(function(){
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				// Handle response.
-				alert(xhr.responseText); // handle response.
+				//alert(xhr.responseText); // handle response.
+				location.reload();
 			}
 		};
 		
 		// check to see if a file has been selected 
-		if (typeof element_file !== "undefined") fd.append('file', element_file);
+		// if there is a file the text box will become the description
+		// if there is no file the textbox is the content
 		
-		fd.append('description', element_description);
+		if (typeof element_file !== "undefined")
+		{
+			fd.append('file', element_file);
+			fd.append('description', element_description);
+		}else
+		{
+			fd.append('contents', element_description);
+		}
+		
 		fd.append('pages_id', pages_id);
 		fd.append('x', x);
 		fd.append('y', y);
@@ -245,7 +295,8 @@ function getContentDiagonal(element) {
 function initText(elm, index)
 {
 	//console.log( page_elements_json[index].description);
-	$(elm).html( page_elements_json[index].description ); 
+	// display the content not the description
+	$(elm).append( '<span id="text-content">' + page_elements_json[index].contents + '</span>'); 
 }
 
 // ----------------------------------------------- IMAGE
