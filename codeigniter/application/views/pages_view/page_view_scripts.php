@@ -4,6 +4,8 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>libraries/fineuploader.jquery-3.0/jquery.fineuploader-3.0.min.js"></script>
 <script type="text/javascript">
 
+(function($){
+
 // Save the base url as a a javascript variable
 var base_url = "<?php echo base_url(); ?>";
 var initDiagonal;
@@ -387,5 +389,5 @@ function checkForLinks(text)
 		return null;
 	}
 }
-
+})($);
 </script>
