@@ -242,10 +242,28 @@ class Elements_model extends CI_Model {
 	// 
 	public function update_element()
     {
+    	// get the post data
+    	$post_data = $this->input->post();
+    	print_r($post_data);
    		$id = $this->input->post('id');
 
+		if ($this->input->post('contents'))
+		{
+			$this->load->model('Links_model');
+			$this->load->model('Pages_model');
+			
+			$pages_title = $this->Pages_model->get_title($id);
+			
+			$this->Links_model->delete_links_by_element_id($id);
+			
+			$contents = $this->Links_model->process_links($post_data['contents'], $pages_title, $id);
+		
+			$post_data['contents'] = $contents;
+		}
+		
 		$this->db->where('id', $id);
-		$this->db->update('elements', $this->input->post()); 
+		
+		$this->db->update('elements', $post_data); 
 		return $this->db->affected_rows();
    	}
    

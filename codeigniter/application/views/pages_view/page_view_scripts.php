@@ -85,16 +85,19 @@ $(document).ready(function(){
 				// get the id of the container
 				var link_id = $(this).attr('id');
 				
+				var cloned_content = $(this).clone();
+				
 				// get the  a list of all links
-				var links = $(this).find('a'); 
+				var links = $(cloned_content).find('a'); 
 				
 				$.each( links, function( key, value ) {
   					var page_title = $(this).html();
   					$(this).replaceWith('[[' + page_title + ']]');
 				});
 				
-				
-				console.log($(this).html());
+				var new_contents = $(cloned_content).find('span').html();
+				console.log(new_contents);
+				updateElement(link_id, 'text-content', new_contents);
 			}
 		}
 	});
@@ -296,7 +299,7 @@ function initText(elm, index)
 {
 	//console.log( page_elements_json[index].description);
 	// display the content not the description
-	$(elm).append( '<span id="text-content">' + page_elements_json[index].contents + '</span>'); 
+	$(elm).append( '<span class="text-content">' + page_elements_json[index].contents + '</span>'); 
 }
 
 // ----------------------------------------------- IMAGE
@@ -319,7 +322,7 @@ function initVideo(elm, index)
 }
 
 // Update only the changes that have been made
-function updateElement(elementId, change){
+function updateElement(elementId, change, alt){
 
 	// create an object with only the id 
 	var changes = {'id':elementId};
@@ -339,6 +342,9 @@ function updateElement(elementId, change){
 			changes.x = parseInt($('#' + elementId).css('left'), 10);
 			changes.y = parseInt(	$('#' + elementId).css('top'), 10);
 			break;
+		case 'text-content':
+			changes.contents = alt;
+			break; 
 	}
 	
 	// Ajax the values to the pages controller 
