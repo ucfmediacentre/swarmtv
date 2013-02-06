@@ -68,7 +68,7 @@
 			if( $(this).hasClass('text') )
 			{
 				// make content editable and disable drag
-				$(this).find('span').attr('contenteditable','true');
+				$(this).find('.text-content').attr('contenteditable','true');
 				$(this).draggable({ disabled: true });
 				
 				// listen for when the user shifts focus out of the box
@@ -81,14 +81,19 @@
 					$(this).unbind('focusout', updateTextElementContent);
 				
 					// undo changes to element for editing
-					$(this).find('span').removeAttr('contenteditable');
+					
+					// get the content
+					var content_container = $(this).find('.text-content');
+					
+					// activate the drag and deactivate the content editable
+					$(content_container).removeAttr('contenteditable');
 					$(this).draggable({ disabled: false });	
 					
 					// get the id of the container
 					var link_id = $(this).attr('id');
 					
 					// make a replica of content
-					var cloned_content = $(this).clone();
+					var cloned_content = $(content_container).clone();
 					
 					// get the  a list of all links
 					var links = $(cloned_content).find('a'); 
@@ -100,12 +105,12 @@
 					});
 					
 					// get the new content
-					var new_contents = $(cloned_content).find('span').html();
+					var new_contents = $(content_container).html();
 					// send to database
 					updateElement(link_id, 'text-content', new_contents);
-					console.log(new_contents);
+					console.log(processShortCodes(new_contents));
 					// update the element with the links
-					$(this).html(processShortCodes(new_contents));
+					$(content_container).html(processShortCodes(new_contents));
 					
 				}
 			}
@@ -308,7 +313,7 @@
 	{
 		//console.log( page_elements_json[index].description);
 		// display the content not the description
-		$(elm).append( '<span class="text-content">' + page_elements_json[index].contents + '</span>'); 
+		$(elm).append( '<div class="text-content">' + page_elements_json[index].contents + '</span>'); 
 	}
 	
 	// ----------------------------------------------- IMAGE
