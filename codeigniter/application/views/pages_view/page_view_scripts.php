@@ -59,10 +59,14 @@
 			
 			$('input[name="x"]').val(e.pageX);
 			$('input[name="y"]').val(e.pageY);
+			
+			clearSelection();
 		});
 		
 		// double click elements
 		$('.element').dblclick(function(){
+			
+			$(this).find('.delete_button').fadeIn();
 			
 			// Only allow inline editing for text elements
 			if( $(this).hasClass('text') )
@@ -77,6 +81,7 @@
 				// callback for focus out
 				function updateTextElementContent()
 				{
+					$(this).find('.delete_button').fadeOut();
 					// remove the event
 					$(this).unbind('focusout', updateTextElementContent);
 				
@@ -108,7 +113,7 @@
 					var new_contents = $(content_container).html();
 					// send to database
 					updateElement(link_id, 'text-content', new_contents);
-					console.log(processShortCodes(new_contents));
+					//console.log(processShortCodes(new_contents));
 					// update the element with the links
 					$(content_container).html(processShortCodes(new_contents));
 					
@@ -164,6 +169,22 @@
 			// Initiate a multipart/form-data upload
 			xhr.send(fd);
 			
+		});
+		
+		$('.delete_button').click(function(e){
+		
+			e.preventDefault();
+			
+			var element_id = $(this).attr('href');
+		
+			$.ajax({
+				url		: base_url + 'index.php/elements/delete/' + element_id,
+				type	: 'GET',
+				success	: function(data, status)
+				{
+					location.reload();
+				}
+			});
 		});
 		
 		// update preview is file is selected
@@ -291,6 +312,11 @@
 					}
 				});
 			}		
+			
+			// Add delete button
+			var delete_button = $('<a href="' + page_elements_json[i].id + '">');
+			$(delete_button).addClass("delete_button");
+			$(elm).append(delete_button);
 			
 			// add new element to the array
 			page_elements.push(elm);
@@ -423,6 +449,15 @@
 		}
 		
 		return string;
+	}
+	
+	function clearSelection() {
+    	if(document.selection && document.selection.empty) {
+        	document.selection.empty();
+    	} else if(window.getSelection) {
+        	var sel = window.getSelection();
+        	sel.removeAllRanges();
+    	}
 	}
 })($);
 </script>

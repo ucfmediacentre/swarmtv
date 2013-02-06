@@ -9,6 +9,10 @@
 /* ==========================================================================
    Base styles: opinionated defaults
    ========================================================================== */
+* {
+     -moz-user-select: none; // mozilla browsers
+     -khtml-user-select: none; // webkit browsers
+}
 
 html,
 button,
@@ -19,6 +23,7 @@ textarea {
 }
 
 body {
+	font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
     font-size: 1em;
     line-height: 1.4;
 	position:absolute;
@@ -33,7 +38,7 @@ body {
 	-o-background-size: cover;
 	background-size: cover;
 	z-index:1;
-	color:#cccccc;
+	color:#ccc;
 	padding:2em;
 }
 
@@ -112,6 +117,7 @@ body,html{
 	left:0px;
 	top:0px;
 	overflow:auto;
+	color:#fff;
 }
 
 /*
@@ -125,6 +131,24 @@ body,html{
 	height:100%;
 	z-index:1;
 	color:#ffffff;
+}
+a#main_home_button{
+	display:block;
+	height:30px;
+	width:100px;
+	position:fixed;
+	left:20px;
+	bottom:20px;
+	background-image:url(../img/home.png);
+	background-position:0px -75px;
+	text-align:center;
+	padding-top:45px;
+	color:#ccc;
+	text-decoration:none;
+}
+a#main_home_button:hover{
+	background-position:0px 0px;
+	color:#fff;
 }
 .element{
 	position:relative;
@@ -173,8 +197,21 @@ textarea#element_description{
 .element_box{
 	padding:10px;
 	position:absolute;	
+	color:#fff !important;
 }
-
+.delete_button{
+	width:20px;
+	height:20px;
+	right:3px;
+	top:3px;
+	position:absolute;
+	background-image:url(../img/del.png);
+	background-position:0px -20px;
+	display:none;
+}
+.delete_button:hover{
+	background-position:0px 0px;
+}
 
 /* ==========================================================================
    Helper classes

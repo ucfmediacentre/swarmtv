@@ -116,6 +116,7 @@
           var w = 10
           ctx.fillStyle = "orange";
           ctx.fillRect(pt.x-w/2, pt.y-w/2, w,w);
+          ctx.font = '20px Calibri';
            ctx.fillStyle = "white";
           ctx.fillText(node.name, pt.x, pt.y);
         })    			

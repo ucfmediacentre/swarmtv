@@ -71,6 +71,13 @@ class Elements_model extends CI_Model {
     	}
     	return $elements;
     }
+    
+    function get_element_by_id($id)
+    {
+    	$this->db->where('id', $id);
+    	$query = $this->db->get('elements');
+    	return $query->row();
+    }
 
 	// validate the file using magic-bytes
 	function validate_file()
@@ -296,11 +303,18 @@ class Elements_model extends CI_Model {
 	
 	public function delete($id)
 	{
+		$element = $this->get_element_by_id($id);
 		// delete all links for this element
 		$this->load->model('Links_model');
 		$this->Links_model->delete_links_by_element_id($id);
 		
+		// create a new element in the deleted_elements **** make sure to add the old ID field
+		unlink($element->id);
+		$this->db->insert('deleted_elements', $element);
+		
 		// delete element
 		$this->db->delete('elements', array('id' => $id)); 
+		
+		
 	}
 }
