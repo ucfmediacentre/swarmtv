@@ -58,6 +58,12 @@ class Elements extends CI_Controller {
 		$this->load->model('Elements_model');
 		echo $this->Elements_model->update_element();
 	}
+	
+	public function delete($id)
+	{
+		$this->load->model('Elements_model');
+		$this->Elements_model->delete($id);
+	}
 }
 
 /* End of file Elements.php */

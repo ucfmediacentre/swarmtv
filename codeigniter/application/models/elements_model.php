@@ -293,4 +293,15 @@ class Elements_model extends CI_Model {
 	{
 		return $this->data['pages_id'];
 	}
+	
+	public function delete($id)
+	{
+		// delete all links for this element
+		$this->load->model('Links_model');
+		$this->Links_model->delete_links_by_element_id($id)
+		
+		// delete element
+		$this->db->where('id',$id);
+		$this->db->delete('elements');
+	}
 }
