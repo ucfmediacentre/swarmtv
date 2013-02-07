@@ -16,7 +16,7 @@ class Links_model extends CI_Model {
 	// and the parts either side of the links in an array.
 	function parse_string_for_links($string)
 	{
-		$pattern = "/(?<=\[\[)[\w ]+(?=\]\])/"; // [[ ... ]] regex
+		$pattern = "/(?<=\[\[)[\w :]+(?=\]\])/"; // [[ ... ]] regex
 		
 		$links = null;							// array to store results of regex					
 		$cursor = 0;							// cursor to keep track of the substring start position

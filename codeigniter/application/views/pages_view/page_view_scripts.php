@@ -27,6 +27,15 @@
 			$(this).animate({ 'background-color': '#333' });
 		});
 		
+		// Work around for linking with special chars
+		$('.text-content a').click(function(e){
+			e.preventDefault();
+			
+			var location = $(this).attr('href');
+			
+			window.location.href = base_url + "index.php/pages/view/" +location;
+		});
+		
 		// Ajax submit for updating page info 
 		$('#page_info_submit').click(function(e){
 			// Stop the page from navigating away from this page
